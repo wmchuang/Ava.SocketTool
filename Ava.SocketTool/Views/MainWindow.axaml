@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dd="clr-namespace:Ava.SocketTool.ViewModels"
+        d:DataContext="{x:Static dd:DesignData.ExampleMainWindowViewModel}"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+        Width="700" Height="500"
+        MinWidth="700" MinHeight="500"
+        x:Class="Ava.SocketTool.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Ava.SocketTool 调试工具V1.0">
+
+
+    <Grid RowDefinitions="30,*">
+        
+        <StackPanel Orientation="Horizontal" Spacing="20"
+                    Background="#F0F0F0">
+            <Button Content="创建" Margin="20 0 0 0" Command="{Binding CreateCommand}"
+                    CommandParameter="{Binding #TreeView}"/>
+            <Button Content="删除" />
+        </StackPanel>
+        
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,3.5*">
+            <TreeView Background="#FBFAF0" ItemsSource="{Binding NetTypes}" x:Name="TreeView">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding Sons}">
+                        <TextBlock Text="{Binding Name}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <GridSplitter Grid.Column="1" Width="2"></GridSplitter>
+            <Panel Grid.Column="2"></Panel>
+        </Grid>
+    </Grid>
+
+
+</Window>

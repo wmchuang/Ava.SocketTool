@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ApplicationIcon>Assets\avalonia-logo.ico</ApplicationIcon>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectCapability Include="Avalonia" />
+        <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.19" />
+        <PackageReference Include="ReactiveUI.Fody" Version="19.2.1" />
+    </ItemGroup>
+</Project>
