@@ -4,10 +4,14 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Ava.SocketTool.Models;
 
-public class NetType : ReactiveObject
+public class NetType : ModelBase
 {
     public string Name { get; set; } = string.Empty;
     public NetTypeEnum TypeEnum { get; set; }
 
-    [Reactive] public ObservableCollection<NetType> Children { get; set; } = new();
+    /// <summary>
+    /// 
+    /// </summary>
+    [Reactive] 
+    public ObservableCollection<NetType> Children { get; set; } = new();
 }
