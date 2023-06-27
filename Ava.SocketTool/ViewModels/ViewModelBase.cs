@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive;
-using System.Threading.Channels;
 using ReactiveUI;
 
 namespace Ava.SocketTool.ViewModels;

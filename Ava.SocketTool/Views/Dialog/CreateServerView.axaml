@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialog="clr-namespace:Ava.SocketTool.ViewModels.Dialog"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100"
+             Background="Azure"
+             Width="200" Height="100"
+             x:Class="Ava.SocketTool.Views.Dialog.CreateServerView">
+    <Design.DataContext>
+        <dialog:CreateServerViewModel/>
+    </Design.DataContext>
+    
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="20">
+            <StackPanel Orientation="Horizontal" Margin="20 0" >
+                <TextBlock Text="监听端口:  " VerticalAlignment="Center" />
+                <TextBox Height="5" Width="80" Text="60000"></TextBox>
+            </StackPanel>
+            
+            
+            <StackPanel Orientation="Horizontal" Margin="20 0" Spacing="30" >
+                <Button Content="确定" Command="{Binding CreateCommand}"></Button>
+                <Button Content="取消"  x:Name="Cancel"  Click="Cancel_OnClick"></Button>
+            </StackPanel>
+        </StackPanel>
+       
+    </Grid>
+</UserControl>

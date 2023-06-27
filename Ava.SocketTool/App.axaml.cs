@@ -8,6 +8,12 @@ namespace Ava.SocketTool;
 
 public partial class App : Application
 {
+    public App()
+    {
+        var viewLocator = new ViewLocator();
+        DataTemplates.Add(viewLocator);
+    }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -17,9 +23,9 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var  vm =  new MainWindowViewModel();
+            var  vm =  new MainViewModel();
             vm.InitData();
-            desktop.MainWindow = new MainWindow
+            desktop.MainWindow = new MainView
             {
                 DataContext = vm
             };

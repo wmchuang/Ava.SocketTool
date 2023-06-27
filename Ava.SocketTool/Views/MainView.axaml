@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dd="clr-namespace:Ava.SocketTool.ViewModels"
+        d:DataContext="{x:Static dd:DesignData.ExampleMainViewModel}"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:Ava.SocketTool.Controls"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+        Width="700" Height="500"
+        MinWidth="700" MinHeight="500"
+        x:Class="Ava.SocketTool.Views.MainView"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Ava.SocketTool 调试工具V1.0">
+    
+    <Window.Styles>
+        <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+        </Style>
+    </Window.Styles>
+  
+    <controls:Overlay>
+        <Grid RowDefinitions="30,*">
+            <StackPanel Orientation="Horizontal" Spacing="20"
+                        Background="#F0F0F0">
+                <Button Content="创建" Classes="Primary" Margin="20 0 0 0" Command="{Binding CreateCommand}"
+                        CommandParameter="{Binding #TreeView}" />
+                <Button Content="删除" Classes="Warning"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,3.5*">
+                <TreeView Background="#FBFAF0" ItemsSource="{Binding NetTypes}" x:Name="TreeView" >
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}" />
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+                <GridSplitter Grid.Column="1" Width="2"></GridSplitter>
+                <Panel Grid.Column="2">
+                    <Grid RowDefinitions="*,2*,2.5*,0.5*">
+                        <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口">
+                            <TextBox TextWrapping="Wrap" AcceptsReturn="True" />
+                        </HeaderedContentControl>
+                    </Grid>
+                   
+                </Panel>
+            </Grid>
+        </Grid>
+    </controls:Overlay>
+
+</Window>

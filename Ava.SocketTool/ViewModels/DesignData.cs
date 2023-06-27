@@ -5,14 +5,14 @@ namespace Ava.SocketTool.ViewModels;
 
 public static class DesignData
 {
-    public static MainWindowViewModel ExampleMainWindowViewModel { get; } = new MainWindowViewModel()
+    public static MainViewModel ExampleMainViewModel { get; } = new MainViewModel()
     {
         NetTypes = new ObservableCollection<NetType>()
         {
             new NetType()
             {
                 Name = "TCP Server",
-                Sons = new ObservableCollection<NetType>()
+                Children = new ObservableCollection<NetType>()
                 {
                     new NetType()
                     {
@@ -27,7 +27,7 @@ public static class DesignData
             new NetType()
             {
                 Name = "TCP Client",
-                Sons = new ObservableCollection<NetType>()
+                Children = new ObservableCollection<NetType>()
                 {
                     new NetType()
                     {

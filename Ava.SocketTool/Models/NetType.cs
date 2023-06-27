@@ -9,5 +9,5 @@ public class NetType : ReactiveObject
     public string Name { get; set; } = string.Empty;
     public NetTypeEnum TypeEnum { get; set; }
 
-    [Reactive] public ObservableCollection<NetType> Sons { get; set; } = new();
+    [Reactive] public ObservableCollection<NetType> Children { get; set; } = new();
 }
