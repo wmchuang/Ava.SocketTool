@@ -2,6 +2,7 @@ using System;
 using System.Reactive;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.Models;
+using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using ReactiveUI;
@@ -31,6 +32,7 @@ public class CreateServerViewModel : ViewModelBase
     {
         if (!int.TryParse(portStr, out var port))
         {
+            OverlayExtension.ShowDialog(new ErrorDialogView("端口号不正确"));
             return;
         }
 

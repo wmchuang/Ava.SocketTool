@@ -3,9 +3,7 @@
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://Ava.SocketTool/Styles/Button.axaml" />
                 <ResourceInclude Source="avares://Ava.SocketTool/Styles/HeaderedContentControl.axaml" />
-                <ResourceInclude Source="avares://Ava.SocketTool/Styles/TreeView.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>

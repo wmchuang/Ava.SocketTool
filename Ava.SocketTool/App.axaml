@@ -1,13 +1,12 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             RequestedThemeVariant="Dark"
              x:Class="Ava.SocketTool.App">
 
     <Application.Styles>
-        <FluentTheme/>
-        <StyleInclude Source="avares://Ava.SocketTool/Styles/IndexTheme.axaml"></StyleInclude>
-
+        <StyleInclude Source="avares://Semi.Avalonia/Themes/Index.axaml" />
         
-        <StyleInclude Source="/Controls/Overlay.axaml"></StyleInclude>
-        
+        <StyleInclude Source="/Controls/Overlay.axaml" />
+        <StyleInclude Source="/Styles/IndexTheme.axaml" />
     </Application.Styles>
 </Application>

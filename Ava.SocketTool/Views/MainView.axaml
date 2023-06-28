@@ -19,16 +19,19 @@
     </Window.Styles>
   
     <controls:Overlay>
-        <Grid RowDefinitions="30,*">
-            <StackPanel Orientation="Horizontal"
-                        Background="#F0F0F0">
-                <Button Content="创建" Classes="Primary" Margin="20 0" Command="{Binding CreateCommand}"
-                        CommandParameter="{Binding #TreeView}" Height="20" Width="60"/>
-                <Button Content="删除" Classes="Warning" Height="20" Width="60"/>
-            </StackPanel>
-
+        <Grid RowDefinitions="50,*">
+            <Border Theme="{StaticResource CardBorder}" VerticalAlignment="Center"
+                    Padding="5">
+               
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="创建" Theme="{DynamicResource SolidButton}" Classes="Primary" Margin="20 0" Command="{Binding CreateCommand}"
+                            CommandParameter="{Binding #TreeView}" />
+                    <Button Content="删除" Theme="{DynamicResource SolidButton}" Classes="Danger"/>
+                </StackPanel>
+            </Border>
+           
             <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.8*">
-                <TreeView Background="#FBFAF0" ItemsSource="{Binding NetTypes}" x:Name="TreeView" >
+                <TreeView  ItemsSource="{Binding NetTypes}" x:Name="TreeView" >
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" FontSize="12" />
@@ -39,7 +42,7 @@
                 <Panel Grid.Column="2">
                     <Grid RowDefinitions="*,2*,2.5*,0.5*">
                         <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口">
-                            <TextBox TextWrapping="Wrap" AcceptsReturn="True"  Text="{Binding ReceiveMessage}"/>
+                            <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" Text="{Binding ReceiveMessage}"/>
                         </HeaderedContentControl>
                     </Grid>
                    
