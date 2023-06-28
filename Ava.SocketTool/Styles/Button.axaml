@@ -5,13 +5,13 @@
     <sys:Double x:Key="ButtonDefaultFontSize">14</sys:Double>
     <FontWeight x:Key="ButtonDefaultFontWeight">600</FontWeight>
 
-    <Thickness x:Key="ButtonDefaultPadding">12 6</Thickness>
+    <Thickness x:Key="ButtonDefaultPadding">0 0</Thickness>
     <Thickness x:Key="ButtonLargePadding">16 10</Thickness>
     <Thickness x:Key="ButtonSmallPadding">6 2</Thickness>
 
     <Thickness x:Key="ButtonBorderThickness">1</Thickness>
 
-    <CornerRadius x:Key="ButtonCornerRadius">3</CornerRadius>
+    <CornerRadius x:Key="ButtonCornerRadius">5</CornerRadius>
     
     <SolidColorBrush x:Key="ButtonDefaultPrimaryForeground" Color="#54A9FF" />
     <SolidColorBrush x:Key="ButtonDefaultSecondaryForeground" Color="#40B4F3" />
@@ -21,15 +21,15 @@
     <SolidColorBrush x:Key="ButtonDefaultDangerForeground" Color="#FC725A" />
     <SolidColorBrush x:Key="ButtonDefaultDisabledForeground" Opacity="0.35" Color="#F9F9F9" />
 
-    <SolidColorBrush x:Key="ButtonDefaultBackground" Opacity="0.12" Color="White" />
+    <SolidColorBrush x:Key="ButtonDefaultBackground" Opacity="0.12" Color="#2f54eb" />
     <SolidColorBrush x:Key="ButtonDefaultPointeroverBackground" Opacity="0.16" Color="White" />
     <SolidColorBrush x:Key="ButtonDefaultPressedBackground" Opacity="0.20" Color="White" />
     <SolidColorBrush x:Key="ButtonDefaultDisabledBackground" Opacity="0.04" Color="#E6E8EA" />
 
-    <SolidColorBrush x:Key="ButtonDefaultBorderBrush" Color="Transparent" />
-    <SolidColorBrush x:Key="ButtonDefaultPointeroverBorderBrush" Color="Transparent" />
-    <SolidColorBrush x:Key="ButtonDefaultPressedBorderBrush" Color="Transparent" />
-    <SolidColorBrush x:Key="ButtonDefaultDisabledBorderBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="ButtonDefaultBorderBrush" Color="#2948c5" />
+    <SolidColorBrush x:Key="ButtonDefaultPointeroverBorderBrush" Color="#2948c5" />
+    <SolidColorBrush x:Key="ButtonDefaultPressedBorderBrush" Color="#2948c5" />
+    <SolidColorBrush x:Key="ButtonDefaultDisabledBorderBrush" Color="#2948c5" />
     
     
     

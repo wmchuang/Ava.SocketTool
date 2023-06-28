@@ -27,14 +27,21 @@ public class CreateServerViewModel : ViewModelBase
     /// <summary>
     /// 创建
     /// </summary>
-    public ReactiveCommand<Unit, Unit> CreateCommand => CreateCommand<Unit>(async tree =>
+    public ReactiveCommand<string, Unit> CreateCommand => CreateCommand<string>(async portStr =>
     {
-        var ip = NetworkExtension.GetIp();
-        var port = 60000;
-        await SocketServer.SocketManager.Instance.CreateTcpServer(ip, port);
-        Owner.Add(TypeEnum,$"{ip}:{port}");
-        
+        if (!int.TryParse(portStr, out var port))
+        {
+            return;
+        }
+
+        var netType = new NetType(NetworkExtension.GetIp(),portStr)
+        {
+            TypeEnum = TypeEnum
+        };
+
+        await SocketServer.SocketManager.Instance.CreateTcpServer(netType.Ip, port);
+        Owner.Add(TypeEnum, netType);
+
         await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
-     
     });
 }

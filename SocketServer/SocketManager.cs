@@ -10,6 +10,8 @@ public class SocketManager
     private static SocketManager _instance;
 
     public static SocketManager Instance => _instance ??= new SocketManager();
+    
+    public event EventHandler<PackageHandlerEventArgs> PackageHandler;
 
     private SocketManager()
     {
@@ -22,6 +24,10 @@ public class SocketManager
             //注册用于处理接收到的数据的包处理器
             .UsePackageHandler(async (session, package) =>
             {
+                PackageHandler?.Invoke(this,new PackageHandlerEventArgs()
+                {
+                    Message = package.Text
+                });
                 var result = 0;
                 //发送消息给客户端
                 await session.SendAsync(Encoding.UTF8.GetBytes(result.ToString() + "\r\n"));

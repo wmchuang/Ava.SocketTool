@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using Ava.SocketTool.Models;
 using ReactiveUI.Fody.Helpers;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.ViewModels.Dialog;
-using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using ReactiveUI;
 
@@ -15,9 +15,20 @@ public class MainViewModel : ViewModelBase
 {
     public MainViewModel()
     {
+        SocketServer.SocketManager.Instance.PackageHandler += (sender, args) =>
+        {
+            var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{ Environment.NewLine}";
+            ReceiveMessage += str;
+        };
     }
 
     [Reactive] public ObservableCollection<NetType> NetTypes { get; set; } = new();
+
+    /// <summary>
+    /// 收到的消息
+    /// </summary>
+    [Reactive]
+    public string ReceiveMessage { get; set; }
 
     public void InitData()
     {
@@ -32,13 +43,10 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    public void Add(NetTypeEnum typeEnum,string ipPort)
+    public void Add(NetTypeEnum typeEnum, NetType netType)
     {
-        var m = NetTypes.FirstOrDefault(x => x.TypeEnum == typeEnum);
-        m.Children.Add(new NetType()
-        {
-            Name = ipPort
-        });
+        var netTypeParent = NetTypes.FirstOrDefault(x => x.TypeEnum == typeEnum);
+        netTypeParent.Children.Add(netType);
     }
 
     /// <summary>
@@ -48,5 +56,4 @@ public class MainViewModel : ViewModelBase
     {
         OverlayExtension.ShowDialog(new CreateServerViewModel(this, NetTypeEnum.TcpServer));
     });
-      
-}   
+}

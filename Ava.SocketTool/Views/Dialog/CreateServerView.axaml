@@ -15,13 +15,13 @@
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="20">
             <StackPanel Orientation="Horizontal" Margin="20 0" >
                 <TextBlock Text="监听端口:  " VerticalAlignment="Center" />
-                <TextBox Height="5" Width="80" Text="60000"></TextBox>
+                <TextBox Height="5" Width="80" Text="60000" x:Name="Port"></TextBox>
             </StackPanel>
             
             
             <StackPanel Orientation="Horizontal" Margin="20 0" Spacing="30" >
-                <Button Content="确定" Command="{Binding CreateCommand}"></Button>
-                <Button Content="取消"  x:Name="Cancel"  Click="Cancel_OnClick"></Button>
+                <Button Content="确定" Command="{Binding CreateCommand}" CommandParameter="{Binding #Port.Text}" Width="50"></Button>
+                <Button Content="取消"  x:Name="Cancel"  Click="Cancel_OnClick" Width="50"></Button>
             </StackPanel>
         </StackPanel>
        
