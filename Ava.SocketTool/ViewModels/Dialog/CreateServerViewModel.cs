@@ -3,7 +3,6 @@ using System.Reactive;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.Models;
 using Ava.SocketTool.Views.Dialog;
-using Avalonia.Controls;
 using Avalonia.Threading;
 using ReactiveUI;
 
@@ -19,12 +18,12 @@ public class CreateServerViewModel : ViewModelBase
     {
     }
 
-    public CreateServerViewModel(MainViewModel owner,NetTypeEnum typeEnum) : this()
+    public CreateServerViewModel(MainViewModel owner, NetTypeEnum typeEnum) : this()
     {
         Owner = owner;
         TypeEnum = typeEnum;
     }
-    
+
     /// <summary>
     /// 创建
     /// </summary>
@@ -36,14 +35,25 @@ public class CreateServerViewModel : ViewModelBase
             return;
         }
 
-        var netType = new NetType(NetworkExtension.GetIp(),portStr)
+        var socketModel = new SocketModel(NetworkExtension.GetIp(), portStr)
         {
             TypeEnum = TypeEnum
         };
 
-        await SocketServer.SocketManager.Instance.CreateTcpServer(netType.Ip, port);
-        Owner.Add(TypeEnum, netType);
-
-        await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
+        try
+        {
+            await SocketServer.SocketManager.Instance.CreateTcpServer(socketModel.Ip, port);
+           
+        }
+        catch (Exception e)
+        {
+            socketModel.IsEnable = false;
+            OverlayExtension.ShowDialog(new ErrorDialogView(e.Message));
+        }
+        finally
+        {
+            Owner.Add(TypeEnum, socketModel);
+            await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
+        }
     });
 }

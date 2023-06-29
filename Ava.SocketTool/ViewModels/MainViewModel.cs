@@ -6,6 +6,7 @@ using Ava.SocketTool.Models;
 using ReactiveUI.Fody.Helpers;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.ViewModels.Dialog;
+using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using ReactiveUI;
 
@@ -17,12 +18,12 @@ public class MainViewModel : ViewModelBase
     {
         SocketServer.SocketManager.Instance.PackageHandler += (sender, args) =>
         {
-            var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{ Environment.NewLine}";
+            var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
             ReceiveMessage += str;
         };
     }
 
-    [Reactive] public ObservableCollection<NetType> NetTypes { get; set; } = new();
+    [Reactive] public ObservableCollection<TreeDataModel> TreeDataList { get; set; } = new();
 
     /// <summary>
     /// 收到的消息
@@ -35,18 +36,17 @@ public class MainViewModel : ViewModelBase
         var list = EnumExtension.GetList<NetTypeEnum>();
         foreach (var item in list)
         {
-            NetTypes.Add(new NetType()
+            TreeDataList.Add(new SocketModel(item.Description)
             {
-                Name = item.Description,
                 TypeEnum = item.Type,
             });
         }
     }
 
-    public void Add(NetTypeEnum typeEnum, NetType netType)
+    public void Add(NetTypeEnum typeEnum, SocketModel netType)
     {
-        var netTypeParent = NetTypes.FirstOrDefault(x => x.TypeEnum == typeEnum);
-        netTypeParent.Children.Add(netType);
+        var treeDataParent = TreeDataList.FirstOrDefault(x => x.TypeEnum == typeEnum);
+        treeDataParent.Children.Add(netType);
     }
 
     /// <summary>
@@ -54,6 +54,29 @@ public class MainViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<TreeView, Unit> CreateCommand => CreateCommand<TreeView>(async tree =>
     {
-        OverlayExtension.ShowDialog(new CreateServerViewModel(this, NetTypeEnum.TcpServer));
+        if (tree.SelectedItem is TreeDataModel treeDataModel)
+        {
+            OverlayExtension.ShowDialog(new CreateServerViewModel(this, treeDataModel.TypeEnum));
+        }
+        else
+        {
+            OverlayExtension.ShowDialog(new ErrorDialogView("请选择类型"));
+        }
+
+    });
+    
+    /// <summary>
+    /// 启动
+    /// </summary>
+    public ReactiveCommand<TreeView, Unit> EnableCommand => CreateCommand<TreeView>(async tree =>
+    {
+        if (tree.SelectedItem is SocketModel socketModel)
+        {
+            await SocketServer.SocketManager.Instance.EnableServer(socketModel.Ip, Convert.ToInt32(socketModel.Port));
+        }
+        else
+        {
+            OverlayExtension.ShowDialog(new ErrorDialogView("请选择Server"));
+        }
     });
 }

@@ -1,25 +1,22 @@
 ﻿using System.Collections.ObjectModel;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Ava.SocketTool.Models;
 
-public class NetType : ModelBase
+public class SocketModel : TreeDataModel
 {
-    public NetType()
+    public SocketModel(string name)
     {
+        Name = name;
     }
 
-    public NetType(string ip, string port)
+    public SocketModel(string ip, string port)
     {
         Ip = ip;
         Port = port;
         Name = $"{ip}[{port}]";
     }
 
-    public string Name { get; set; } = string.Empty;
-    public NetTypeEnum TypeEnum { get; set; }
-    
     /// <summary>
     /// Ip
     /// </summary>
@@ -29,7 +26,13 @@ public class NetType : ModelBase
     /// Port
     /// </summary>
     public string Port { get; set; }
-    
+
+    /// <summary>
+    /// Is Enable
+    /// </summary>
+    [Reactive]
+    public bool IsEnable { get; set; } = true;
+
     /// <summary>
     /// Send Message
     /// </summary>
@@ -41,11 +44,8 @@ public class NetType : ModelBase
     public string ReceiveMessage { get; set; }
 
     /// <summary>
-    /// 
+    /// Children data
     /// </summary>
-    [Reactive] 
-    public ObservableCollection<NetType> Children { get; set; } = new();
-    
-    
-    
+    [Reactive]
+    public new ObservableCollection<SocketModel> Children { get; set; } = new();
 }

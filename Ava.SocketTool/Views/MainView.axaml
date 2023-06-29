@@ -31,7 +31,7 @@
             </Border>
            
             <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.8*">
-                <TreeView  ItemsSource="{Binding NetTypes}" x:Name="TreeView" >
+                <TreeView  ItemsSource="{Binding TreeDataList}" x:Name="TreeView" >
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" FontSize="12" />
@@ -40,7 +40,25 @@
                 </TreeView>
                 <GridSplitter Grid.Column="1" Width="2"></GridSplitter>
                 <Panel Grid.Column="2">
-                    <Grid RowDefinitions="*,2*,2.5*,0.5*">
+                    <Grid RowDefinitions="1.2*,2*,2.5*,0.5*">
+                        
+                        <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
+                            <Border Theme="{StaticResource CardBorder}" Padding="20 1">
+                            <Grid RowDefinitions="*,*">
+                                <TextBlock Text="已停止"></TextBlock>
+                                
+                                <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <Button Content="启动监听"  Classes="Primary"  FontSize="10"/>
+                                        <Button Content="停止监听"  Classes="Danger" FontSize="10"/>
+                                    </StackPanel>
+                                    
+                                    <TextBlock Grid.Column="1" Text="本地端口：60000" VerticalAlignment="Center"></TextBlock>
+                                </Grid>
+                            </Grid>
+                                </Border>
+                        </HeaderedContentControl>
+                        
                         <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口">
                             <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" Text="{Binding ReceiveMessage}"/>
                         </HeaderedContentControl>

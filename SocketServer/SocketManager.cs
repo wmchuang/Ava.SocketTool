@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Concurrent;
+using System.Text;
 using Microsoft.Extensions.Hosting;
 using SuperSocket;
 using SuperSocket.ProtoBase;
@@ -7,11 +8,18 @@ namespace SocketServer;
 
 public class SocketManager
 {
+
+    private static ConcurrentDictionary<string, IHost> _tcpServer = new ConcurrentDictionary<string, IHost>();
     private static SocketManager _instance;
 
     public static SocketManager Instance => _instance ??= new SocketManager();
     
+    /// <summary>
+    /// 数据包处理
+    /// </summary>
     public event EventHandler<PackageHandlerEventArgs> PackageHandler;
+    
+  
 
     private SocketManager()
     {
@@ -54,8 +62,25 @@ public class SocketManager
                         Port = port
                     }
                 }.ToList();
-            })
-            .Build();
-        await host.StartAsync();
+            }).Build();
+
+        _tcpServer.TryAdd($"{ip}:{port}", host);
+       await host.StartAsync();
+    }
+
+    public async Task EnableServer(string ip, int port)
+    {
+        if (_tcpServer.TryGetValue($"{ip}:{port}", out var host))
+        {
+            await host.StartAsync();
+        }
+    }
+    
+    public async Task DisableServer(string ip, int port)
+    {
+        if (_tcpServer.TryGetValue($"{ip}:{port}", out var host))
+        {
+            await host.StopAsync();
+        }
     }
 }
