@@ -14,75 +14,89 @@
         x:Class="Ava.SocketTool.Views.MainView"
         Icon="/Assets/avalonia-logo.ico"
         Title="Ava.SocketTool 调试工具V1.0">
-    
+
     <Window.Styles>
         <Style Selector="TreeViewItem">
             <Setter Property="IsExpanded" Value="True" />
         </Style>
     </Window.Styles>
-  
+
     <controls:Overlay>
         <Grid RowDefinitions="50,*">
             <Border Theme="{StaticResource CardBorder}" VerticalAlignment="Center"
                     Padding="5">
-               
+
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="创建" Theme="{DynamicResource SolidButton}" Classes="Primary" Margin="20 0" Command="{Binding CreateCommand}"
+                    <Button Content="创建" Theme="{DynamicResource SolidButton}" Classes="Primary" Margin="20 0"
+                            Command="{Binding CreateCommand}"
                             CommandParameter="{Binding #TreeView}" />
-                    <Button Content="删除" Theme="{DynamicResource SolidButton}" Classes="Danger"/>
+                    <Button Content="删除" Theme="{DynamicResource SolidButton}" Classes="Danger" />
                 </StackPanel>
             </Border>
-           
+
             <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.8*">
-                <TreeView  ItemsSource="{Binding TreeDataList}" x:Name="TreeView">
+                <TreeView ItemsSource="{Binding TreeDataList}" x:Name="TreeView">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" FontSize="12" />
                         </TreeDataTemplate>
                     </TreeView.ItemTemplate>
-                    
+
                     <i:Interaction.Behaviors>
-                    	<ia:EventTriggerBehavior EventName="SelectionChanged">
-                    		<ia:InvokeCommandAction
-                    			Command="{Binding SelectionChangedCommand}" 
-                                CommandParameter="{Binding #TreeView}"/>
-                    	</ia:EventTriggerBehavior>
+                        <ia:EventTriggerBehavior EventName="SelectionChanged">
+                            <ia:InvokeCommandAction
+                                Command="{Binding SelectionChangedCommand}"
+                                CommandParameter="{Binding #TreeView}" />
+                        </ia:EventTriggerBehavior>
                     </i:Interaction.Behaviors>
                 </TreeView>
-                
+
                 <GridSplitter Grid.Column="1" Width="2"></GridSplitter>
-                
-                <Panel Grid.Column="2">
-                    <Grid RowDefinitions="1.2*,2*,2.5*,0.5*">
+
+                <Grid Grid.Column="2">
+                    <Grid>
+                        <Grid RowDefinitions="1.2*,2*,2.5*,0.5*"
+                              IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
+                                <Grid RowDefinitions="*,*">
+                                    <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}"></TextBlock>
                         
-                        <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
-                            <Grid RowDefinitions="*,*">
-                                <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}"></TextBlock>
-                                
-                                <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                                    <StackPanel Orientation="Horizontal" Spacing="10">
-                                        <Button Content="启动监听"  Classes="Primary"  FontSize="10"
-                                                Command="{Binding EnableCommand}"
-                                                IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}"/>
-                                        <Button Content="停止监听"  Classes="Danger" FontSize="10"
-                                                Command="{Binding DisableCommand}"
-                                                IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}"/>
-                                    </StackPanel>
-                                    
-                                    <TextBlock Grid.Column="1"  VerticalAlignment="Center">
-                                        <Run Text="本地端口：" />
-                                        <Run Text="{Binding CurrentSelectModel.Port}" />
-                                    </TextBlock>
+                                    <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                            <Button Content="启动监听" Classes="Primary" FontSize="10"
+                                                    Command="{Binding EnableCommand}"
+                                                    IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}" />
+                                            <Button Content="停止监听" Classes="Danger" FontSize="10"
+                                                    Command="{Binding DisableCommand}"
+                                                    IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}" />
+                                        </StackPanel>
+                        
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                                            <Run Text="本地端口：" />
+                                            <Run Text="{Binding CurrentSelectModel.Port}" />
+                                        </TextBlock>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </HeaderedContentControl>
+                            </HeaderedContentControl>
                         
-                        <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口" Margin="0 5 0 0">
-                            <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" Text="{Binding ReceiveMessage}"/>
-                        </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"
+                                                    Margin="0 5 0 0">
+                                <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
+                                         Text="{Binding ReceiveMessage}" />
+                            </HeaderedContentControl>
+                        </Grid>
+                        
+                        
+                        <Border  Theme="{StaticResource CardBorder}" VerticalAlignment="Top" 
+                                 IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                            <StackPanel Orientation="Vertical" Spacing="30">
+                                <TextBlock Text="欢迎使用Ava.SockerTool调试工具" Classes="Success" HorizontalAlignment="Center" FontSize="18" />
+                                <TextBlock Text="https://gitee.com/CRole/ava.-socket-tool" Classes="Warning" HorizontalAlignment="Center" />
+                            </StackPanel>
+                         
+                        </Border>
                     </Grid>
-                   
-                </Panel>
+                </Grid>
             </Grid>
         </Grid>
     </controls:Overlay>

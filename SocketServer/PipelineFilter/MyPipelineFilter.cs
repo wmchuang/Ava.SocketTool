@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Text;
 using SuperSocket.ProtoBase;
 
 namespace SocketServer.PipelineFilter;
@@ -21,4 +22,9 @@ public class MyPipelineFilter : PipelineFilterBase<TextPackageInfo>
             reader.Advance(packet.Length);
         }
     }
+    
+    protected override TextPackageInfo DecodePackage(ref ReadOnlySequence<byte> buffer) => new TextPackageInfo()
+    {
+        Text = buffer.GetString(Encoding.UTF8)
+    };
 }

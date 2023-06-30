@@ -30,7 +30,7 @@ public class MainViewModel : ViewModelBase
     /// 当前选择的对象
     /// </summary>
     [Reactive]
-    public SocketTreeModel CurrentSelectModel { get; set; }
+    public SocketTreeModel CurrentSelectModel { get; set; } = new SocketTreeModel();
 
     /// <summary>
     /// 收到的消息

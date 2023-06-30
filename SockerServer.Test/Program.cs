@@ -3,6 +3,7 @@ using SuperSocket.ProtoBase;
 using SuperSocket;
 using System.Text;
 using Microsoft.Extensions.Hosting;
+using SocketServer;
 
 internal class Program
 {
@@ -12,7 +13,12 @@ internal class Program
 
         Console.WriteLine("Press any key to start the server!");
 
-      
+        SocketServer.SocketManager.Instance.CreateTcpServer(new SocketModel()
+        {
+            Ip = "Any",
+            Port = 60000
+        });
+        Console.ReadLine();
     }
 
 }
