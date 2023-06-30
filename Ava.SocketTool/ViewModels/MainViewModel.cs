@@ -81,11 +81,30 @@ public class MainViewModel : ViewModelBase
             OverlayExtension.ShowDialog(new ErrorDialogView("请选择类型"));
         }
     });
+    
+    
+    /// <summary>
+    /// 删除
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> DeleteCommand => CreateCommand<Unit>(async _ =>
+    {
+        foreach (var item in TreeDataList)
+        {
+             var model = item.Children.FirstOrDefault(x => x.Id == CurrentSelectModel.Id);
+             if (model != null)
+             {
+                 StopListenCommand.Execute();
+                 item.Children.Remove(model);
+                 CurrentSelectModel = new();
+                 break;
+             }
+        }
+    });
 
     /// <summary>
     /// 启动
     /// </summary>
-    public ReactiveCommand<Unit, Unit> EnableCommand => CreateCommand<Unit>(async tree =>
+    public ReactiveCommand<Unit, Unit> StartListenCommand => CreateCommand<Unit>(async tree =>
     {
         var state = await SocketManager.Instance.EnableServer(CurrentSelectModel.Key);
         if (state == null)
@@ -101,7 +120,7 @@ public class MainViewModel : ViewModelBase
     /// <summary>
     /// 启动
     /// </summary>
-    public ReactiveCommand<Unit, Unit> DisableCommand => CreateCommand<Unit>(async tree =>
+    public ReactiveCommand<Unit, Unit> StopListenCommand => CreateCommand<Unit>(async tree =>
     {
         var state = await SocketManager.Instance.DisableServer(CurrentSelectModel.Key);
         if (state == null)

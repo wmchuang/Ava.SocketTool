@@ -27,10 +27,11 @@
                     Padding="5">
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="创建" Theme="{DynamicResource SolidButton}" Classes="Primary" Margin="20 0"
+                    <Button Content="创建"  Classes="Primary" Margin="20 0"
                             Command="{Binding CreateCommand}"
                             CommandParameter="{Binding #TreeView}" />
-                    <Button Content="删除" Theme="{DynamicResource SolidButton}" Classes="Danger" />
+                    <Button Content="删除"  Classes="Danger" 
+                            Command="{Binding DeleteCommand}"/>
                 </StackPanel>
             </Border>
 
@@ -64,10 +65,10 @@
                                     <Grid Grid.Row="1" ColumnDefinitions="*,*">
                                         <StackPanel Orientation="Horizontal" Spacing="10">
                                             <Button Content="启动监听" Classes="Primary" FontSize="10"
-                                                    Command="{Binding EnableCommand}"
+                                                    Command="{Binding StartListenCommand}"
                                                     IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}" />
                                             <Button Content="停止监听" Classes="Danger" FontSize="10"
-                                                    Command="{Binding DisableCommand}"
+                                                    Command="{Binding StopListenCommand}"
                                                     IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}" />
                                         </StackPanel>
                         
