@@ -4,7 +4,10 @@
         d:DataContext="{x:Static dd:DesignData.ExampleMainViewModel}"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         xmlns:controls="clr-namespace:Ava.SocketTool.Controls"
+        xmlns:cv="clr-namespace:Ava.SocketTool.Convert"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
         Width="700" Height="500"
         MinWidth="700" MinHeight="500"
@@ -31,35 +34,47 @@
             </Border>
            
             <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.8*">
-                <TreeView  ItemsSource="{Binding TreeDataList}" x:Name="TreeView" >
+                <TreeView  ItemsSource="{Binding TreeDataList}" x:Name="TreeView">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" FontSize="12" />
                         </TreeDataTemplate>
                     </TreeView.ItemTemplate>
+                    <i:Interaction.Behaviors>
+                    	<ia:EventTriggerBehavior EventName="SelectionChanged">
+                    		<ia:InvokeCommandAction
+                    			Command="{Binding SelectionChangedCommand}" 
+                                CommandParameter="{Binding #TreeView}"/>
+                    	</ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
                 </TreeView>
                 <GridSplitter Grid.Column="1" Width="2"></GridSplitter>
                 <Panel Grid.Column="2">
                     <Grid RowDefinitions="1.2*,2*,2.5*,0.5*">
                         
                         <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
-                            <Border Theme="{StaticResource CardBorder}" Padding="20 1">
                             <Grid RowDefinitions="*,*">
-                                <TextBlock Text="已停止"></TextBlock>
+                                <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}"></TextBlock>
                                 
                                 <Grid Grid.Row="1" ColumnDefinitions="*,*">
                                     <StackPanel Orientation="Horizontal" Spacing="10">
-                                        <Button Content="启动监听"  Classes="Primary"  FontSize="10"/>
-                                        <Button Content="停止监听"  Classes="Danger" FontSize="10"/>
+                                        <Button Content="启动监听"  Classes="Primary"  FontSize="10"
+                                                Command="{Binding EnableCommand}"
+                                                IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}"/>
+                                        <Button Content="停止监听"  Classes="Danger" FontSize="10"
+                                                Command="{Binding DisableCommand}"
+                                                IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}"/>
                                     </StackPanel>
                                     
-                                    <TextBlock Grid.Column="1" Text="本地端口：60000" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Grid.Column="1"  VerticalAlignment="Center">
+                                        <Run Text="本地端口：" />
+                                        <Run Text="{Binding CurrentSelectModel.Port}" />
+                                    </TextBlock>
                                 </Grid>
                             </Grid>
-                                </Border>
                         </HeaderedContentControl>
                         
-                        <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口">
+                        <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口" Margin="0 5 0 0">
                             <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" Text="{Binding ReceiveMessage}"/>
                         </HeaderedContentControl>
                     </Grid>

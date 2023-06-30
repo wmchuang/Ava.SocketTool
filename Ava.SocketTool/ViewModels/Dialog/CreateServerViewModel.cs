@@ -5,6 +5,8 @@ using Ava.SocketTool.Models;
 using Ava.SocketTool.Views.Dialog;
 using Avalonia.Threading;
 using ReactiveUI;
+using SocketServer;
+using SuperSocket;
 
 namespace Ava.SocketTool.ViewModels.Dialog;
 
@@ -31,29 +33,29 @@ public class CreateServerViewModel : ViewModelBase
     {
         if (!int.TryParse(portStr, out var port))
         {
-            OverlayExtension.ShowDialog(new ErrorDialogView("端口号不正确"));
+            OverlayExtension.ShowDialog(new ErrorDialogView("端口号不正确！"));
             return;
         }
 
-        var socketModel = new SocketModel(NetworkExtension.GetIp(), portStr)
+        var socketModel = new SocketTreeModel(NetworkExtension.GetIp(), port)
         {
             TypeEnum = TypeEnum
         };
 
-        try
+        var state = await SocketManager.Instance.CreateTcpServer(new SocketModel()
         {
-            await SocketServer.SocketManager.Instance.CreateTcpServer(socketModel.Ip, port);
-           
-        }
-        catch (Exception e)
+            Id = socketModel.Id,
+            Ip = socketModel.Ip,
+            Port = socketModel.Port,
+        });
+        if (state == ServerState.Failed)
         {
-            socketModel.IsEnable = false;
-            OverlayExtension.ShowDialog(new ErrorDialogView(e.Message));
+            OverlayExtension.ShowDialog(new ErrorDialogView("创建失败，端口可能被占用！"));
+            return;
         }
-        finally
-        {
-            Owner.Add(TypeEnum, socketModel);
-            await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
-        }
+
+        socketModel.ServerStateModel.ServerState = state;
+        Owner.Add(TypeEnum, socketModel);
+        await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
     });
 }

@@ -9,6 +9,7 @@ using Ava.SocketTool.ViewModels.Dialog;
 using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using ReactiveUI;
+using SocketServer;
 
 namespace Ava.SocketTool.ViewModels;
 
@@ -23,7 +24,13 @@ public class MainViewModel : ViewModelBase
         };
     }
 
-    [Reactive] public ObservableCollection<TreeDataModel> TreeDataList { get; set; } = new();
+    [Reactive] public ObservableCollection<SocketTreeModel> TreeDataList { get; set; } = new();
+
+    /// <summary>
+    /// 当前选择的对象
+    /// </summary>
+    [Reactive]
+    public SocketTreeModel CurrentSelectModel { get; set; }
 
     /// <summary>
     /// 收到的消息
@@ -36,25 +43,36 @@ public class MainViewModel : ViewModelBase
         var list = EnumExtension.GetList<NetTypeEnum>();
         foreach (var item in list)
         {
-            TreeDataList.Add(new SocketModel(item.Description)
+            TreeDataList.Add(new SocketTreeModel(item.Description)
             {
                 TypeEnum = item.Type,
             });
         }
     }
 
-    public void Add(NetTypeEnum typeEnum, SocketModel netType)
+    public void Add(NetTypeEnum typeEnum, SocketTreeModel netType)
     {
         var treeDataParent = TreeDataList.FirstOrDefault(x => x.TypeEnum == typeEnum);
         treeDataParent.Children.Add(netType);
     }
 
     /// <summary>
+    /// 选中切换
+    /// </summary>
+    public ReactiveCommand<TreeView, Unit> SelectionChangedCommand => CreateCommand<TreeView>(async tree =>
+    {
+        if (tree.SelectedItem != null)
+        {
+            CurrentSelectModel = tree.SelectedItem as SocketTreeModel;
+        }
+    });
+
+    /// <summary>
     /// 创建
     /// </summary>
     public ReactiveCommand<TreeView, Unit> CreateCommand => CreateCommand<TreeView>(async tree =>
     {
-        if (tree.SelectedItem is TreeDataModel treeDataModel)
+        if (tree.SelectedItem is SocketTreeModel treeDataModel)
         {
             OverlayExtension.ShowDialog(new CreateServerViewModel(this, treeDataModel.TypeEnum));
         }
@@ -62,21 +80,37 @@ public class MainViewModel : ViewModelBase
         {
             OverlayExtension.ShowDialog(new ErrorDialogView("请选择类型"));
         }
-
     });
-    
+
     /// <summary>
     /// 启动
     /// </summary>
-    public ReactiveCommand<TreeView, Unit> EnableCommand => CreateCommand<TreeView>(async tree =>
+    public ReactiveCommand<Unit, Unit> EnableCommand => CreateCommand<Unit>(async tree =>
     {
-        if (tree.SelectedItem is SocketModel socketModel)
+        var state = await SocketManager.Instance.EnableServer(CurrentSelectModel.Key);
+        if (state == null)
         {
-            await SocketServer.SocketManager.Instance.EnableServer(socketModel.Ip, Convert.ToInt32(socketModel.Port));
+            OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
         }
         else
         {
-            OverlayExtension.ShowDialog(new ErrorDialogView("请选择Server"));
+            CurrentSelectModel.ServerStateModel.ServerState = state.Value;
+        }
+    });
+
+    /// <summary>
+    /// 启动
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> DisableCommand => CreateCommand<Unit>(async tree =>
+    {
+        var state = await SocketManager.Instance.DisableServer(CurrentSelectModel.Key);
+        if (state == null)
+        {
+            OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
+        }
+        else
+        {
+            CurrentSelectModel.ServerStateModel.ServerState = state.Value;
         }
     });
 }
