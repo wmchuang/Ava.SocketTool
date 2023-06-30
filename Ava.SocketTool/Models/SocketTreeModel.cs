@@ -7,6 +7,10 @@ namespace Ava.SocketTool.Models;
 
 public class SocketTreeModel : ModelBase
 {
+    public SocketTreeModel()
+    {
+    }
+
     public SocketTreeModel(string name)
     {
         Name = name;

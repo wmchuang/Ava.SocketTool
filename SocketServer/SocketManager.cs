@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SocketServer.PipelineFilter;
 using SuperSocket;
 using SuperSocket.ProtoBase;
 using SuperSocket.Server;
@@ -30,7 +31,7 @@ public class SocketManager
     public async Task<ServerState> CreateTcpServer(SocketModel model)
     {
         //创建宿主：用Package的类型和PipelineFilter的类型创建SuperSocket宿主。
-        var host = SuperSocketHostBuilder.Create<TextPackageInfo, LinePipelineFilter>()
+        var host = SuperSocketHostBuilder.Create<TextPackageInfo, MyPipelineFilter>()
             //注册用于处理接收到的数据的包处理器
             .UsePackageHandler(async (session, package) =>
             {
@@ -38,9 +39,6 @@ public class SocketManager
                 {
                     Message = package.Text
                 });
-                var result = 0;
-                //发送消息给客户端
-                await session.SendAsync(Encoding.UTF8.GetBytes(result.ToString() + "\r\n"));
             })
             //注册用于处理连接、关闭的Session处理器
             .UseSessionHandler(async (session) =>

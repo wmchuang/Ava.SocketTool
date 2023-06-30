@@ -31,4 +31,8 @@
     <ItemGroup>
       <ProjectReference Include="..\SocketServer\SocketServer.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaXaml Remove="Styles\TreeView.axaml" />
+    </ItemGroup>
 </Project>
