@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Reactive;
 using Ava.SocketTool.Models;
 using ReactiveUI.Fody.Helpers;
@@ -17,10 +18,29 @@ public class MainViewModel : ViewModelBase
 {
     public MainViewModel()
     {
-        SocketServer.SocketManager.Instance.PackageHandler += (sender, args) =>
+        SocketManager.Instance.PackageHandler += (sender, args) =>
         {
+            var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
+            var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
+            
+            var client = server.Children.FirstOrDefault(x => x.Id == args.SessionID);
             var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
-            ReceiveMessage += str;
+            client.ReceiveMessage += str;
+        };
+        
+        SocketManager.Instance.SessionConnectedHandler += (sender, args) =>
+        {
+            var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
+            var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
+
+
+            var sp = args.RemoteEndPoint.ToString().Split(':');
+            server.Children.Add(new SocketTreeModel(sp[0],System.Convert.ToInt32(sp[1]))
+            {
+                Id = args.SessionID,
+                TypeEnum = NetTypeEnum.TcpClient,
+                IsConnect = true
+            });
         };
     }
 
@@ -31,12 +51,6 @@ public class MainViewModel : ViewModelBase
     /// </summary>
     [Reactive]
     public SocketTreeModel CurrentSelectModel { get; set; } = new SocketTreeModel();
-
-    /// <summary>
-    /// 收到的消息
-    /// </summary>
-    [Reactive]
-    public string ReceiveMessage { get; set; }
 
     public void InitData()
     {

@@ -55,19 +55,21 @@ public class SocketTreeModel : ModelBase
     public ServerStateModel ServerStateModel { get; set; } = new ServerStateModel();
     
     /// <summary>
-    /// 是否运行
+    /// 是否连接
     /// </summary>
     [Reactive]
-    public bool IsStart { get; set; }
+    public bool IsConnect { get; set; }
 
     /// <summary>
     /// Send Message
     /// </summary>
+    [Reactive]
     public string SendMessage { get; set; }
 
     /// <summary>
     /// Receive Message
     /// </summary>
+    [Reactive]
     public string ReceiveMessage { get; set; }
 
     /// <summary>

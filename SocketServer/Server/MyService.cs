@@ -18,6 +18,7 @@ public class MyService : SuperSocketService<TextPackageInfo>
         _tokenSource = new CancellationTokenSource();
     }
 
+
     protected override ValueTask OnStopAsync()
     {
         var sessionContainer = this.GetSessionContainer().GetSessions();
