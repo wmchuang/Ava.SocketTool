@@ -2,7 +2,7 @@
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SocketServer.PipelineFilter;
+using SocketServer.Server;
 using SuperSocket;
 using SuperSocket.ProtoBase;
 using SuperSocket.Server;
@@ -16,6 +16,8 @@ public class SocketManager
     private static SocketManager _instance;
 
     public static SocketManager Instance => _instance ??= new SocketManager();
+
+    private static CancellationTokenSource _cts = new CancellationTokenSource();
     
     /// <summary>
     /// 数据包处理
@@ -32,6 +34,9 @@ public class SocketManager
     {
         //创建宿主：用Package的类型和PipelineFilter的类型创建SuperSocket宿主。
         var host = SuperSocketHostBuilder.Create<TextPackageInfo, MyPipelineFilter>()
+            .UseHostedService<MyService>()
+            .UseSession<MySession>()
+          
             //注册用于处理接收到的数据的包处理器
             .UsePackageHandler(async (session, package) =>
             {
@@ -39,16 +44,6 @@ public class SocketManager
                 {
                     Message = package.Text
                 });
-            })
-            //注册用于处理连接、关闭的Session处理器
-            .UseSessionHandler(async (session) =>
-            {
-                Console.WriteLine($"{DateTime.Now} [SessionHandler] Session connected: {session.RemoteEndPoint}");
-                await Task.Delay(0);
-            }, async (session, reason) =>
-            {
-                Console.WriteLine($"{DateTime.Now} [SessionHandler] Session {session.RemoteEndPoint} closed: {reason}");
-                await Task.Delay(0);
             })
             //配置服务器如服务器名和监听端口等基本信息
             .ConfigureSuperSocket(options =>
@@ -62,7 +57,9 @@ public class SocketManager
                         Port = model.Port
                     }
                 }.ToList();
-            }).Build();
+            })
+            .UseInProcSessionContainer()
+            .Build();
 
         _tcpServer.TryAdd(model.Key, host);
        await host.StartAsync();
@@ -77,6 +74,7 @@ public class SocketManager
         if (_tcpServer.TryGetValue(key, out var host))
         {
             var service = host.Services.GetService<SuperSocketService<TextPackageInfo>>();
+            await service.StartAsync(_cts.Token);
             return service.State;
         }
 
@@ -87,8 +85,8 @@ public class SocketManager
     {
         if (_tcpServer.TryGetValue(key, out var host))
         {
-            await host.StopAsync();
             var service = host.Services.GetService<SuperSocketService<TextPackageInfo>>();
+            await service.StopAsync(_cts.Token);
             return service.State;
         }
 
