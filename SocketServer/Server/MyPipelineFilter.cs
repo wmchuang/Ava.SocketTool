@@ -10,7 +10,7 @@ public class MyPipelineFilter : PipelineFilterBase<TextPackageInfo>
     {
         // 获取输入流的所有剩余数据构成一个数据包
         var packet = reader.Sequence.Slice(0);
-
+     
         try
         {
             // 将所有剩余数据包进行解码
@@ -23,8 +23,13 @@ public class MyPipelineFilter : PipelineFilterBase<TextPackageInfo>
         }
     }
     
-    protected override TextPackageInfo DecodePackage(ref ReadOnlySequence<byte> buffer) => new TextPackageInfo()
+    protected override TextPackageInfo DecodePackage(ref ReadOnlySequence<byte> buffer)
     {
-        Text = buffer.GetString(Encoding.UTF8)
-    };
+        var enc =new UTF8Encoding(true);
+        return new TextPackageInfo()
+        {
+            Text = enc.GetString(buffer)
+            // Text = buffer.GetString(Encoding.UTF8)
+        };
+    }
 }
