@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ava.SocketTool", "Ava.Socke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketServer", "SocketServer\SocketServer.csproj", "{C5F6AD68-C4F0-4D5F-8E6E-E742D3098C0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SockerServer.Test", "SockerServer.Test\SockerServer.Test.csproj", "{BAD2FA01-625B-479D-99EC-E9B1D0CB4507}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketServer.Test", "SocketServer.Test\SocketServer.Test.csproj", "{BAD2FA01-625B-479D-99EC-E9B1D0CB4507}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
