@@ -107,7 +107,7 @@
                             <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"
                                                     Margin="0 5 0 0">
                                 <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
-                                         Text="{Binding CurrentSelectModel.ReceiveMessage}" />
+                                         Text="{Binding CurrentSelectModel.ReceiveMessage}"  TextChanged="TextBox_OnTextChanged"/>
                             </HeaderedContentControl>
                             
                             <Grid Grid.Row="2" ColumnDefinitions="2*,*">

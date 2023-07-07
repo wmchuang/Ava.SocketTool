@@ -21,4 +21,12 @@ public partial class MainView : Window
             app.RequestedThemeVariant = theme == ThemeVariant.Dark ? ThemeVariant.Light : ThemeVariant.Dark;
         }
     }
+
+    private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sender is TextBox tb)
+        {
+            tb.CaretIndex = tb.Text?.Length ?? 0;
+        }
+    }
 }
