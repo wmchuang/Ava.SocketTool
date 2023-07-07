@@ -25,11 +25,10 @@ public class MyPipelineFilter : PipelineFilterBase<TextPackageInfo>
     
     protected override TextPackageInfo DecodePackage(ref ReadOnlySequence<byte> buffer)
     {
-        var enc =new UTF8Encoding(true);
         return new TextPackageInfo()
         {
-            Text = enc.GetString(buffer)
             // Text = buffer.GetString(Encoding.UTF8)
+             Text = buffer.GetString(Encoding.GetEncoding("GBK"))
         };
     }
 }

@@ -34,6 +34,7 @@ public class SocketManager
 
     private SocketManager()
     {
+        Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
     }
 
     public async Task<ServerState> CreateTcpServer(SocketModel model)
