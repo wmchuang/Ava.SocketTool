@@ -1,41 +1,36 @@
 ﻿using System.Collections.Concurrent;
+using System.Net;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SocketServer.EventArg;
 using SocketServer.Server;
 using SuperSocket;
+using SuperSocket.Channel;
+using SuperSocket.Client;
 using SuperSocket.ProtoBase;
 using SuperSocket.Server;
 
 namespace SocketServer;
 
-public class SocketManager
+public class SocketServerManager : ISocketServerManager
 {
-
     private static ConcurrentDictionary<string, IServer> _tcpServer = new ConcurrentDictionary<string, IServer>();
-    private static SocketManager _instance;
+    private static SocketServerManager _instance;
 
-    public static SocketManager Instance => _instance ??= new SocketManager();
+    public static SocketServerManager Instance => _instance ??= new SocketServerManager();
 
-    private static CancellationTokenSource _cts = new CancellationTokenSource();
-    
+    private static CancellationTokenSource _cts = new();
+
     /// <summary>
     /// 数据包处理
     /// </summary>
     public event EventHandler<PackageHandlerEventArgs> PackageHandler;
-    
+
     /// <summary>
     /// Session Connected 
     /// </summary>
     public event EventHandler<SessionConnectedEventArgs> SessionConnectedHandler;
-    
-  
-
-    private SocketManager()
-    {
-        Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-    }
 
     public async Task<ServerState> CreateTcpServer(SocketModel model)
     {
@@ -46,7 +41,7 @@ public class SocketManager
             //注册用于处理连接、关闭的Session处理器
             .UseSessionHandler(async (session) =>
             {
-                SessionConnectedHandler?.Invoke(this,new SessionConnectedEventArgs()
+                SessionConnectedHandler?.Invoke(this, new SessionConnectedEventArgs()
                 {
                     ServerId = session.Server.Name,
                     SessionID = session.SessionID,
@@ -58,11 +53,11 @@ public class SocketManager
                 Console.WriteLine($"{DateTime.Now} [SessionHandler] Session {session.RemoteEndPoint} closed: {reason}");
                 await Task.Delay(0);
             })
-          
+
             //注册用于处理接收到的数据的包处理器
             .UsePackageHandler((session, package) =>
             {
-                PackageHandler?.Invoke(this,new PackageHandlerEventArgs()
+                PackageHandler?.Invoke(this, new PackageHandlerEventArgs()
                 {
                     ServerId = session.Server.Name,
                     SessionID = session.SessionID,
@@ -87,11 +82,10 @@ public class SocketManager
             .BuildAsServer();
 
         _tcpServer.TryAdd(model.Key, server);
-       await server.StartAsync();
-       
-       var service = server.ServiceProvider.GetService<MyService>();
-       return service.State;
+        await server.StartAsync();
 
+        var service = server.ServiceProvider.GetService<MyService>();
+        return service.State;
     }
 
     public async Task<ServerState?> EnableServer(string key)

@@ -33,7 +33,7 @@
                         <Button Content="删除" Classes="Danger"
                                 Command="{Binding DeleteCommand}" />
                     </StackPanel>
-                    
+
                     <ToggleSwitch
                         Grid.Column="1"
                         Padding="4"
@@ -52,7 +52,7 @@
                                 Height="16"
                                 Data="M12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23ZM17 15C17.476 15 17.9408 14.9525 18.3901 14.862C17.296 17.3011 14.8464 19 12 19C8.13401 19 5 15.866 5 12C5 8.60996 7.40983 5.78277 10.6099 5.13803C10.218 6.01173 10 6.98041 10 8C10 11.866 13.134 15 17 15Z"
                                 Foreground="{DynamicResource ButtonDefaultTertiaryForeground}" />
-                              
+
                         </ToggleSwitch.OffContent>
                     </ToggleSwitch>
                 </Grid>
@@ -80,12 +80,11 @@
                 <Grid Grid.Column="2">
                     <Grid>
                         <Grid RowDefinitions="1.2*,2*,2.5*,0.5*"
-                              IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                              >
+                              IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                             <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
                                 <Grid RowDefinitions="*,*">
                                     <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}" Classes="Danger"></TextBlock>
-                        
+
                                     <Grid Grid.Row="1" ColumnDefinitions="*,*">
                                         <StackPanel Orientation="Horizontal" Spacing="10">
                                             <Button Content="启动监听" Classes="Primary" FontSize="10"
@@ -95,7 +94,7 @@
                                                     Command="{Binding StopListenCommand}"
                                                     IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}" />
                                         </StackPanel>
-                        
+
                                         <TextBlock Grid.Column="1" VerticalAlignment="Center">
                                             <Run Text="本地端口：" />
                                             <Run Text="{Binding CurrentSelectModel.Port}" />
@@ -103,23 +102,23 @@
                                     </Grid>
                                 </Grid>
                             </HeaderedContentControl>
-                        
+
                             <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"
                                                     Margin="0 5 0 0">
                                 <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
-                                         Text="{Binding CurrentSelectModel.ReceiveMessage}"  TextChanged="TextBox_OnTextChanged"/>
+                                         Text="{Binding CurrentSelectModel.ReceiveMessage}" TextChanged="TextBox_OnTextChanged" />
                             </HeaderedContentControl>
-                            
+
                             <Grid Grid.Row="2" ColumnDefinitions="2*,*">
                                 <HeaderedContentControl Grid.Column="0" Theme="{DynamicResource GroupBox}" Header="数据发送窗口"
                                                         Margin="0 5 0 0">
                                     <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
                                              Text="{Binding CurrentSelectModel.SendMessage}" />
                                 </HeaderedContentControl>
-                                
-                                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" >
-                                    <Button Content="发送数据" Margin="0 30 0 0"></Button>
-                                    <TextBlock Text="重复发送次数" Margin="0 20 0 0"></TextBlock>
+
+                                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
+                                    <Button Content="发送数据" Margin="0 30 0 0" Command="{Binding SendCommand}" />
+                                    <TextBlock Text="重复发送次数" Margin="0 20 0 0" />
                                     <ComboBox Width="150" Classes="Bordered">
                                         <ComboBoxItem>1</ComboBoxItem>
                                         <ComboBoxItem>10</ComboBoxItem>
@@ -127,19 +126,19 @@
                                         <ComboBoxItem>1000</ComboBoxItem>
                                         <ComboBoxItem>10000</ComboBoxItem>
                                     </ComboBox>
-                                    
+
                                 </StackPanel>
                             </Grid>
                         </Grid>
-                        
-                        
-                        <Border  Theme="{StaticResource CardBorder}" VerticalAlignment="Top"
-                                 IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNullOrEmpty}}">
+
+
+                        <Border Theme="{StaticResource CardBorder}" VerticalAlignment="Top"
+                                IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNullOrEmpty}}">
                             <StackPanel Orientation="Vertical" Spacing="30">
                                 <TextBlock Text="欢迎使用Ava.SockerTool调试工具" Classes="Success" HorizontalAlignment="Center" FontSize="18" />
                                 <TextBlock Text="https://gitee.com/CRole/ava.-socket-tool" Classes="Warning" HorizontalAlignment="Center" />
                             </StackPanel>
-                        
+
                         </Border>
                     </Grid>
                 </Grid>

@@ -17,7 +17,5 @@ public class SocketModel
     /// </summary>
     public int Port { get; set; }
 
-    public string Name => $"{Ip}:{Port}";
-
     public string Key => $"{Id}_{Ip}:{Port}";
 }

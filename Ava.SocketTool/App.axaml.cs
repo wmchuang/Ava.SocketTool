@@ -1,8 +1,11 @@
+using System.Text;
+using Ava.SocketTool.Extensions;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Ava.SocketTool.ViewModels;
 using Ava.SocketTool.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ava.SocketTool;
 
@@ -23,7 +26,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var  vm =  new MainViewModel();
+            var vm = Bootstrapper.GetService<MainViewModel>();
             vm.InitData();
             desktop.MainWindow = new MainView
             {
@@ -32,5 +35,15 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    public override void RegisterServices()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        
+        var serviceCollection = new ServiceCollection();
+        Bootstrapper.ConfigureServices(serviceCollection);
+        
+        base.RegisterServices();
     }
 }

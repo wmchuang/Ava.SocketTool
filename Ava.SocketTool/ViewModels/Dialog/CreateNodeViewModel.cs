@@ -13,6 +13,8 @@ namespace Ava.SocketTool.ViewModels.Dialog;
 
 public class CreateNodeViewModel : ViewModelBase
 {
+    private readonly ISocketServerManager _serverManager;
+    private readonly ISocketClientManager _clientManager;
     public MainViewModel Owner { get; set; }
 
     public NodeModel NodeModel { get; set; }
@@ -21,7 +23,13 @@ public class CreateNodeViewModel : ViewModelBase
     {
     }
 
-    public CreateNodeViewModel(MainViewModel owner, NetTypeEnum typeEnum) : this()
+    public CreateNodeViewModel(ISocketServerManager serverManager, ISocketClientManager clientManager)
+    {
+        _serverManager = serverManager;
+        _clientManager = clientManager;
+    }
+
+    public void Init(MainViewModel owner, NetTypeEnum typeEnum)
     {
         Owner = owner;
         NodeModel = new NodeModel
@@ -40,19 +48,33 @@ public class CreateNodeViewModel : ViewModelBase
             TypeEnum = NodeModel.TypeEnum
         };
 
-        var state = await SocketManager.Instance.CreateTcpServer(new SocketModel()
+        if (socketModel.TypeEnum == NetTypeEnum.TcpServer)
         {
-            Id = socketModel.Id,
-            Ip = socketModel.Ip,
-            Port = socketModel.Port,
-        });
-        if (state == ServerState.Failed)
-        {
-            OverlayExtension.ShowDialog(new ErrorDialogView("创建失败，端口可能被占用！"));
-            return;
+            var state = await _serverManager.CreateTcpServer(new SocketModel()
+            {
+                Id = socketModel.Id,
+                Ip = socketModel.Ip,
+                Port = socketModel.Port,
+            });
+            if (state == ServerState.Failed)
+            {
+                OverlayExtension.ShowDialog(new ErrorDialogView("创建失败，端口可能被占用！"));
+                return;
+            }
+
+            socketModel.ServerStateModel.ServerState = state;
         }
 
-        socketModel.ServerStateModel.ServerState = state;
+        if (socketModel.TypeEnum == NetTypeEnum.TcpClient)
+        {
+            await _clientManager.CreateTcpClient(new SocketModel()
+            {
+                Id = socketModel.Id,
+                Ip = socketModel.Ip,
+                Port = socketModel.Port,
+            });
+        }
+
         Owner.Add(NodeModel.TypeEnum, socketModel);
         await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
     });
