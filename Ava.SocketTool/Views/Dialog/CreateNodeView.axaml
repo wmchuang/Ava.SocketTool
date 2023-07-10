@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Ava.SocketTool.ViewModels.Dialog"
+             xmlns:dataTemplate="clr-namespace:Ava.SocketTool.DataTemplate"
+             xmlns:model="clr-namespace:Ava.SocketTool.Models.Dialog"
+             mc:Ignorable="d" 
+             d:DesignWidth="250" d:DesignHeight="170"
+             Width="250" Height="170"
+             BorderThickness="1"
+             BorderBrush="Cornsilk"
+             Background="{DynamicResource BorderCardBackground}"
+             x:Class="Ava.SocketTool.Views.Dialog.CreateNodeView">
+    <Design.DataContext>
+        <vm:CreateNodeViewModel/>
+    </Design.DataContext>
+    
+    <UserControl.DataTemplates>
+        <dataTemplate:NodeModelTemplateSelector>
+            <!-- Tcp Server Node -->
+            <DataTemplate x:Key="TcpServer" DataType="model:NodeModel">
+                <StackPanel Orientation="Horizontal" Margin="20 0">
+                    <TextBlock Text="监听端口: " VerticalAlignment="Center" />
+                    <TextBox Width="80" Text="{Binding Port}"></TextBox>
+                </StackPanel>
+            </DataTemplate>
+
+            <!-- Tcp Client Node -->
+            <DataTemplate x:Key="TcpClient" DataType="model:NodeModel">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="20">
+                    <StackPanel Orientation="Horizontal" Margin="20 0">
+                        <TextBlock Text="    对方IP: " VerticalAlignment="Center" />
+                        <TextBox Width="100" Text="127.0.0.1" x:Name="IP"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="20 0">
+                        <TextBlock Text="对方端口: " VerticalAlignment="Center" />
+                        <TextBox Width="80" Text="60000" x:Name="Port"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+        </dataTemplate:NodeModelTemplateSelector>
+    </UserControl.DataTemplates>
+
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="20">
+            
+            <ContentControl Content="{Binding NodeModel}"/>
+            
+            <StackPanel Orientation="Horizontal" Margin="20 0" Spacing="30" >
+                <Button Content="确定" Command="{Binding CreateCommand}" />
+                <Button Content="取消"  x:Name="Cancel"  Click="Cancel_OnClick" Classes="Danger" />
+            </StackPanel>
+        </StackPanel>
+       
+    </Grid>
+</UserControl>

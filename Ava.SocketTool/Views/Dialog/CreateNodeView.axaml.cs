@@ -1,12 +1,13 @@
+using Ava.SocketTool.Extensions;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace Ava.SocketTool.Views.Dialog;
 
-public partial class CreateServerView : DialogBaseUserControl
+public partial class CreateNodeView : UserControl
 {
-    public CreateServerView()
+    public CreateNodeView()
     {
         InitializeComponent();
     }
@@ -16,6 +17,6 @@ public partial class CreateServerView : DialogBaseUserControl
 
     private void Cancel_OnClick(object? sender, RoutedEventArgs e)
     {
-        CloseDialog();
+        OverlayExtension.CloseDialog();
     }
 }

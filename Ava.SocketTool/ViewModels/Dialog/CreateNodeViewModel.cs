@@ -2,6 +2,7 @@ using System;
 using System.Reactive;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.Models;
+using Ava.SocketTool.Models.Dialog;
 using Ava.SocketTool.Views.Dialog;
 using Avalonia.Threading;
 using ReactiveUI;
@@ -10,36 +11,33 @@ using SuperSocket;
 
 namespace Ava.SocketTool.ViewModels.Dialog;
 
-public class CreateServerViewModel : ViewModelBase
+public class CreateNodeViewModel : ViewModelBase
 {
-    public NetTypeEnum TypeEnum { get; set; }
-
     public MainViewModel Owner { get; set; }
 
-    public CreateServerViewModel()
+    public NodeModel NodeModel { get; set; }
+
+    public CreateNodeViewModel()
     {
     }
 
-    public CreateServerViewModel(MainViewModel owner, NetTypeEnum typeEnum) : this()
+    public CreateNodeViewModel(MainViewModel owner, NetTypeEnum typeEnum) : this()
     {
         Owner = owner;
-        TypeEnum = typeEnum;
+        NodeModel = new NodeModel
+        {
+            TypeEnum = typeEnum
+        };
     }
 
     /// <summary>
-    /// 创建
+    /// 创建节点
     /// </summary>
-    public ReactiveCommand<string, Unit> CreateCommand => CreateCommand<string>(async portStr =>
+    public ReactiveCommand<Unit, Unit> CreateCommand => CreateCommand<Unit>(async _ =>
     {
-        if (!int.TryParse(portStr, out var port))
+        var socketModel = new SocketTreeModel(NetworkExtension.GetIp(), NodeModel.Port)
         {
-            OverlayExtension.ShowDialog(new ErrorDialogView("端口号不正确！"));
-            return;
-        }
-
-        var socketModel = new SocketTreeModel(NetworkExtension.GetIp(), port)
-        {
-            TypeEnum = TypeEnum
+            TypeEnum = NodeModel.TypeEnum
         };
 
         var state = await SocketManager.Instance.CreateTcpServer(new SocketModel()
@@ -55,7 +53,7 @@ public class CreateServerViewModel : ViewModelBase
         }
 
         socketModel.ServerStateModel.ServerState = state;
-        Owner.Add(TypeEnum, socketModel);
+        Owner.Add(NodeModel.TypeEnum, socketModel);
         await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
     });
 }

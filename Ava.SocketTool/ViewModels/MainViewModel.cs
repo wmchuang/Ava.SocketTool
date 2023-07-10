@@ -88,7 +88,7 @@ public class MainViewModel : ViewModelBase
     {
         if (tree.SelectedItem is SocketTreeModel treeDataModel)
         {
-            OverlayExtension.ShowDialog(new CreateServerViewModel(this, treeDataModel.TypeEnum));
+            OverlayExtension.ShowDialog(new CreateNodeViewModel(this, treeDataModel.TypeEnum));
         }
         else
         {
