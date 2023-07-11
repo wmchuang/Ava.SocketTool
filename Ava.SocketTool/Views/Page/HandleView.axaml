@@ -3,30 +3,90 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dd="clr-namespace:Ava.SocketTool.ViewModels"
+             xmlns:dataTemplate="clr-namespace:Ava.SocketTool.DataTemplate"
+             xmlns:model="clr-namespace:Ava.SocketTool.Models"
              d:DataContext="{x:Static dd:DesignData.ExampleHandleViewModel}"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Control"
              x:Class="Ava.SocketTool.Views.Page.HandleView">
+    <UserControl.Styles>
+        <Style Selector="TextBlock.Start">
+            <Setter Property="Text" Value="监听中" />
+        </Style>
+        <Style Selector="TextBlock.UnStart">
+            <Setter Property="Text" Value="已停止" />
+        </Style>
+        
+        <Style Selector="TextBlock.Connected">
+            <Setter Property="Text" Value="已连接" />
+        </Style>
+        <Style Selector="TextBlock.UnConnected">
+            <Setter Property="Text" Value="已断开" />
+        </Style>
+    </UserControl.Styles>
+    
+    <UserControl.DataTemplates>
+        <dataTemplate:SocketTreeModelTemplateSelector>
+            <!-- Tcp Server Node -->
+            <DataTemplate x:Key="TcpServer" DataType="model:SocketTreeModel">
+                <Grid RowDefinitions="*,*">
+                    <TextBlock Margin="0 5 0 0"
+                               Classes.Success="{Binding IsStart}"
+                               Classes.Start="{Binding IsStart}"
+                               Classes.Danger="{Binding !IsStart}"
+                               Classes.UnStart="{Binding !IsStart}"/>
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button Content="启动监听" Classes="Primary" FontSize="10"
+                                    Command="{Binding #Control.DataContext.StartListenCommand}"
+                                    IsEnabled="{Binding !IsStart}" />
+                            <Button Content="停止监听" Classes="Danger" FontSize="10"
+                                    Command="{Binding #Control.DataContext.StopListenCommand}"
+                                    IsEnabled="{Binding IsStart}" />
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                            <Run Text="本地端口：" />
+                            <Run Text="{Binding Port}" />
+                        </TextBlock>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+
+            <!-- Tcp Client Node -->
+            <DataTemplate x:Key="TcpClient" DataType="model:SocketTreeModel">
+                <Grid RowDefinitions="*,*">
+                    <TextBlock  Margin="0 5 0 0"
+                                Classes.Success="{Binding IsConnect}"
+                               Classes.Connected="{Binding IsConnect}"
+                               Classes.Danger="{Binding !IsConnect}"
+                               Classes.UnConnected="{Binding !IsConnect}"/>
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button Content="连接" Classes="Primary" FontSize="10"
+                                    Command="{Binding #Control.DataContext.StartListenCommand}"
+                                    IsEnabled="{Binding !IsConnect}" />
+                            <Button Content="断开" Classes="Danger" FontSize="10"
+                                    Command="{Binding #Control.DataContext.StopListenCommand}"
+                                    IsEnabled="{Binding IsConnect}" />
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                            <Run Text="本地端口：" />
+                            <Run Text="{Binding Port}" />
+                        </TextBlock>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+        </dataTemplate:SocketTreeModelTemplateSelector>
+    </UserControl.DataTemplates>
+
+    
     <Grid RowDefinitions="1.2*,2*,2.5*,0.5*">
         <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
-            <Grid RowDefinitions="*,*">
-                <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}" Classes="Danger" Margin="0 5 0 0"/>
-
-                <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <Button Content="启动监听" Classes="Primary" FontSize="10"
-                                Command="{Binding StartListenCommand}"
-                                IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}" />
-                        <Button Content="停止监听" Classes="Danger" FontSize="10"
-                                Command="{Binding StopListenCommand}"
-                                IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}" />
-                    </StackPanel>
-
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center">
-                        <Run Text="本地端口：" />
-                        <Run Text="{Binding CurrentSelectModel.Port}" />
-                    </TextBlock>
-                </Grid>
-            </Grid>
+            <ContentControl Content="{Binding CurrentSelectModel}"/>
         </HeaderedContentControl>
 
         <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"

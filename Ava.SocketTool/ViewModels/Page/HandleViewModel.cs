@@ -6,6 +6,7 @@ using Ava.SocketTool.Views.Dialog;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SocketServer;
+using SuperSocket;
 
 namespace Ava.SocketTool.ViewModels.Page;
 
@@ -43,7 +44,7 @@ public class HandleViewModel : ViewModelBase
         }
         else
         {
-            CurrentSelectModel.ServerStateModel.ServerState = state.Value;
+            CurrentSelectModel.IsStart = state == ServerState.Starting;
         }
     });
 
@@ -59,7 +60,7 @@ public class HandleViewModel : ViewModelBase
         }
         else
         {
-            CurrentSelectModel.ServerStateModel.ServerState = state.Value;
+            CurrentSelectModel.IsStart = state == ServerState.Starting;
         }
     });
     

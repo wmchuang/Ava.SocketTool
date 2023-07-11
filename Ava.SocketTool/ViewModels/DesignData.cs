@@ -12,10 +12,7 @@ public static class DesignData
         CurrentSelectModel = new SocketTreeModel()
         {
             Port = 60000,
-            ServerStateModel = new ServerStateModel()
-            {
-                ServerState = ServerState.Starting
-            }
+            IsStart = false,
             
         },
         TreeDataList = new ObservableCollection<SocketTreeModel>()
@@ -45,7 +42,7 @@ public static class DesignData
             TypeEnum = NetTypeEnum.TcpServer,
             Ip = "127.0.0.1",
             Port = 6000,
-            ServerStateModel = new ServerStateModel()
+            IsStart = false,
         }
     };
 }

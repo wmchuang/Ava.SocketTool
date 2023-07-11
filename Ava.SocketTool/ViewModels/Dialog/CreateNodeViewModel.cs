@@ -63,7 +63,7 @@ public class CreateNodeViewModel : ViewModelBase
                 return;
             }
 
-            socketModel.ServerStateModel.ServerState = state;
+            socketModel.IsStart = state == ServerState.Starting;
         }
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpClient)

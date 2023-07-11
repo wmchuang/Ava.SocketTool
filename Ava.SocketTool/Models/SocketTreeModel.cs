@@ -48,11 +48,8 @@ public class SocketTreeModel : ModelBase
     /// </summary>
     public int Port { get; set; }
 
-    /// <summary>
-    /// ServerState
-    /// </summary>
     [Reactive]
-    public ServerStateModel ServerStateModel { get; set; } = new ServerStateModel();
+    public bool IsStart { get; set; }
 
     /// <summary>
     /// 是否连接

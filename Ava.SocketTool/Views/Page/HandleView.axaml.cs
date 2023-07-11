@@ -1,10 +1,7 @@
 ﻿using Ava.SocketTool.Extensions;
 using Ava.SocketTool.ViewModels.Page;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Styling;
 
 namespace Ava.SocketTool.Views.Page;
 
@@ -16,8 +13,6 @@ public partial class HandleView : UserControl
 
         this.DataContext = Bootstrapper.GetService<HandleViewModel>();
     }
-
-
 
     private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
