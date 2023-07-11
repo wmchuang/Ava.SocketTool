@@ -20,9 +20,9 @@ public class SocketTreeModel : ModelBase
     {
         Ip = ip;
         Port = port;
-        Name = $"{ip}[{port}]";
+        SetName(ip, port);
     }
-    
+
     /// <summary>
     /// 唯一Id
     /// </summary>
@@ -53,7 +53,7 @@ public class SocketTreeModel : ModelBase
     /// </summary>
     [Reactive]
     public ServerStateModel ServerStateModel { get; set; } = new ServerStateModel();
-    
+
     /// <summary>
     /// 是否连接
     /// </summary>
@@ -77,6 +77,11 @@ public class SocketTreeModel : ModelBase
     /// </summary>
     [Reactive]
     public ObservableCollection<SocketTreeModel> Children { get; set; } = new();
-    
+
     public string Key => $"{Id}_{Ip}:{Port}";
+
+    public void SetName(string ip, int port)
+    {
+        Name = $"{ip}[{port}]";
+    }
 }

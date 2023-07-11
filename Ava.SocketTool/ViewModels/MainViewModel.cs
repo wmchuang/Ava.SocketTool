@@ -147,6 +147,9 @@ public class MainViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> SendCommand => CreateCommand<Unit>(async tree =>
     {  
          await _clientManager.SendMessage(CurrentSelectModel.Key,CurrentSelectModel.SendMessage);
+         
+         var str = $"{DateTime.Now:HH:mm:dd}收到数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";
+         CurrentSelectModel.ReceiveMessage += str;
          CurrentSelectModel.SendMessage = string.Empty;
     });
     

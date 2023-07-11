@@ -2,7 +2,7 @@
 using System.Text;
 using SuperSocket.ProtoBase;
 
-namespace SocketServer.Server;
+namespace SocketServer.Socket;
 
 public class MyPipelineFilter : PipelineFilterBase<TextPackageInfo>
 {

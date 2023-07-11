@@ -7,6 +7,7 @@ using Ava.SocketTool.Views.Dialog;
 using Avalonia.Threading;
 using ReactiveUI;
 using SocketServer;
+using SocketServer.Model;
 using SuperSocket;
 
 namespace Ava.SocketTool.ViewModels.Dialog;
@@ -67,12 +68,14 @@ public class CreateNodeViewModel : ViewModelBase
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpClient)
         {
-            await _clientManager.CreateTcpClient(new SocketModel()
+            var model = new SocketModel()
             {
                 Id = socketModel.Id,
                 Ip = socketModel.Ip,
                 Port = socketModel.Port,
-            });
+            };
+            model = await _clientManager.CreateTcpClient(model);
+            socketModel.SetName(model.ClientModel.Ip,model.ClientModel.Port);
         }
 
         Owner.Add(NodeModel.TypeEnum, socketModel);

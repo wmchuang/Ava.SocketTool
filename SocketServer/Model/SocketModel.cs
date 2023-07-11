@@ -1,4 +1,4 @@
-﻿namespace SocketServer;
+﻿namespace SocketServer.Model;
 
 public class SocketModel
 {
@@ -16,6 +16,8 @@ public class SocketModel
     /// 端口
     /// </summary>
     public int Port { get; set; }
+
+    public SocketModel ClientModel { get; set; }
 
     public string Key => $"{Id}_{Ip}:{Port}";
 }

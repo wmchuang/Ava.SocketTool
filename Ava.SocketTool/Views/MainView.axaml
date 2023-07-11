@@ -58,7 +58,7 @@
                 </Grid>
             </Border>
 
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.6*">
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.5*">
                 <TreeView ItemsSource="{Binding TreeDataList}" x:Name="TreeView">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">

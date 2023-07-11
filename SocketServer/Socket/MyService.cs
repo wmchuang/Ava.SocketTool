@@ -4,7 +4,7 @@ using SuperSocket.Channel;
 using SuperSocket.ProtoBase;
 using SuperSocket.Server;
 
-namespace SocketServer.Server;
+namespace SocketServer.Socket;
 
 public class MyService : SuperSocketService<TextPackageInfo>
 {

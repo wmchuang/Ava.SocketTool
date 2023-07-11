@@ -4,7 +4,8 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SocketServer.EventArg;
-using SocketServer.Server;
+using SocketServer.Model;
+using SocketServer.Socket;
 using SuperSocket;
 using SuperSocket.Channel;
 using SuperSocket.Client;
@@ -16,10 +17,6 @@ namespace SocketServer;
 public class SocketServerManager : ISocketServerManager
 {
     private static ConcurrentDictionary<string, IServer> _tcpServer = new ConcurrentDictionary<string, IServer>();
-    private static SocketServerManager _instance;
-
-    public static SocketServerManager Instance => _instance ??= new SocketServerManager();
-
     private static CancellationTokenSource _cts = new();
 
     /// <summary>

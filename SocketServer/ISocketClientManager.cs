@@ -1,7 +1,9 @@
+using SocketServer.Model;
+
 namespace SocketServer;
 
 public interface ISocketClientManager
 {
-    Task CreateTcpClient(SocketModel model);
+    Task<SocketModel> CreateTcpClient(SocketModel model);
     Task SendMessage(string key,string message);
 }

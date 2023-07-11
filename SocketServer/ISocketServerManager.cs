@@ -1,4 +1,5 @@
 ﻿using SocketServer.EventArg;
+using SocketServer.Model;
 using SuperSocket;
 
 namespace SocketServer;

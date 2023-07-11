@@ -1,7 +1,7 @@
 ﻿using SuperSocket.Channel;
 using SuperSocket.Server;
 
-namespace SocketServer.Server;
+namespace SocketServer.Socket;
 
 public class MySession : AppSession
 {
