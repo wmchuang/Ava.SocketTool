@@ -7,6 +7,7 @@ using Ava.SocketTool.Models;
 using ReactiveUI.Fody.Helpers;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.ViewModels.Dialog;
+using Ava.SocketTool.ViewModels.Page;
 using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using ReactiveUI;
@@ -23,7 +24,7 @@ public class MainViewModel : ViewModelBase
     {
     }
 
-    public MainViewModel(ISocketServerManager serverManager,ISocketClientManager clientManager)
+    public MainViewModel(ISocketServerManager serverManager, ISocketClientManager clientManager)
     {
         _serverManager = serverManager;
         _clientManager = clientManager;
@@ -37,7 +38,6 @@ public class MainViewModel : ViewModelBase
     /// </summary>
     [Reactive]
     public SocketTreeModel CurrentSelectModel { get; set; } = new SocketTreeModel();
-
 
     public void InitData()
     {
@@ -57,10 +57,7 @@ public class MainViewModel : ViewModelBase
         treeDataParent.Children.Add(netType);
     }
 
-
-    #region Command 
-
-    
+    #region Command
 
     /// <summary>
     /// 选中切换
@@ -70,6 +67,9 @@ public class MainViewModel : ViewModelBase
         if (tree.SelectedItem != null)
         {
             CurrentSelectModel = tree.SelectedItem as SocketTreeModel;
+
+            var handleViewMode = Bootstrapper.GetService<HandleViewModel>();
+            handleViewMode.CurrentSelectModel = CurrentSelectModel;
         }
     });
 
@@ -89,8 +89,7 @@ public class MainViewModel : ViewModelBase
             OverlayExtension.ShowDialog(new ErrorDialogView("请选择类型"));
         }
     });
-    
-    
+
     /// <summary>
     /// 删除
     /// </summary>
@@ -98,63 +97,18 @@ public class MainViewModel : ViewModelBase
     {
         foreach (var item in TreeDataList)
         {
-             var model = item.Children.FirstOrDefault(x => x.Id == CurrentSelectModel.Id);
-             if (model != null)
-             {
-                 StopListenCommand.Execute();
-                 item.Children.Remove(model);
-                 CurrentSelectModel = new();
-                 break;
-             }
+            var model = item.Children.FirstOrDefault(x => x.Id == CurrentSelectModel.Id);
+            if (model != null)
+            {
+                // StopListenCommand.Execute();
+                item.Children.Remove(model);
+                CurrentSelectModel = new();
+                break;
+            }
         }
     });
 
-    /// <summary>
-    /// 开始监听
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> StartListenCommand => CreateCommand<Unit>(async tree =>
-    {
-        var state = await _serverManager.EnableServer(CurrentSelectModel.Key);
-        if (state == null)
-        {
-            OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
-        }
-        else
-        {
-            CurrentSelectModel.ServerStateModel.ServerState = state.Value;
-        }
-    });
-
-    /// <summary>
-    /// 停止监听
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> StopListenCommand => CreateCommand<Unit>(async tree =>
-    {
-        var state = await _serverManager.DisableServer(CurrentSelectModel.Key);
-        if (state == null)
-        {
-            OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
-        }
-        else
-        {
-            CurrentSelectModel.ServerStateModel.ServerState = state.Value;
-        }
-    });
-    
-    /// <summary>
-    /// 发送消息
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> SendCommand => CreateCommand<Unit>(async tree =>
-    {  
-         await _clientManager.SendMessage(CurrentSelectModel.Key,CurrentSelectModel.SendMessage);
-         
-         var str = $"{DateTime.Now:HH:mm:dd}收到数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";
-         CurrentSelectModel.ReceiveMessage += str;
-         CurrentSelectModel.SendMessage = string.Empty;
-    });
-    
     #endregion
-
 
     public void HandEvent()
     {
@@ -162,20 +116,19 @@ public class MainViewModel : ViewModelBase
         {
             var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
             var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
-            
+
             var client = server.Children.FirstOrDefault(x => x.Id == args.SessionID);
             var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
             client.ReceiveMessage += str;
         };
-        
+
         _serverManager.SessionConnectedHandler += (sender, args) =>
         {
             var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
             var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
 
-
             var sp = args.RemoteEndPoint.ToString().Split(':');
-            server.Children.Add(new SocketTreeModel(sp[0],System.Convert.ToInt32(sp[1]))
+            server.Children.Add(new SocketTreeModel(sp[0], System.Convert.ToInt32(sp[1]))
             {
                 Id = args.SessionID,
                 TypeEnum = NetTypeEnum.TcpClient,

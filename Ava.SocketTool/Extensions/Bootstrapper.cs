@@ -1,5 +1,6 @@
 ﻿using Ava.SocketTool.ViewModels;
 using Ava.SocketTool.ViewModels.Dialog;
+using Ava.SocketTool.ViewModels.Page;
 using Microsoft.Extensions.DependencyInjection;
 using SocketServer;
 
@@ -15,6 +16,7 @@ public static class Bootstrapper
         services.AddSingleton<ISocketClientManager, SocketClientManager>();
 
         services.AddSingleton<MainViewModel>();
+        services.AddSingleton<HandleViewModel>();
         services.AddSingleton<CreateNodeViewModel>();
         _serviceProvider = services.BuildServiceProvider();
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Ava.SocketTool.Models;
+using Ava.SocketTool.ViewModels.Page;
 using SuperSocket;
 
 namespace Ava.SocketTool.ViewModels;
@@ -34,6 +35,17 @@ public static class DesignData
                     }
                 }
             }
+        }
+    };
+
+    public static HandleViewModel ExampleHandleViewModel { get; } = new HandleViewModel()
+    {
+        CurrentSelectModel = new SocketTreeModel()
+        {
+            TypeEnum = NetTypeEnum.TcpServer,
+            Ip = "127.0.0.1",
+            Port = 6000,
+            ServerStateModel = new ServerStateModel()
         }
     };
 }

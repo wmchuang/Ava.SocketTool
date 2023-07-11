@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         xmlns:controls="clr-namespace:Ava.SocketTool.Controls"
-        xmlns:cv="clr-namespace:Ava.SocketTool.Convert"
+        xmlns:page="clr-namespace:Ava.SocketTool.Views.Page"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
         Width="700" Height="500"
         MinWidth="700" MinHeight="500"
@@ -58,7 +58,7 @@
                 </Grid>
             </Border>
 
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.5*">
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,2.4*">
                 <TreeView ItemsSource="{Binding TreeDataList}" x:Name="TreeView">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
@@ -79,59 +79,9 @@
 
                 <Grid Grid.Column="2">
                     <Grid>
-                        <Grid RowDefinitions="1.2*,2*,2.5*,0.5*"
-                              IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                            <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
-                                <Grid RowDefinitions="*,*">
-                                    <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}" Classes="Danger"></TextBlock>
-
-                                    <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                                        <StackPanel Orientation="Horizontal" Spacing="10">
-                                            <Button Content="启动监听" Classes="Primary" FontSize="10"
-                                                    Command="{Binding StartListenCommand}"
-                                                    IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}" />
-                                            <Button Content="停止监听" Classes="Danger" FontSize="10"
-                                                    Command="{Binding StopListenCommand}"
-                                                    IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}" />
-                                        </StackPanel>
-
-                                        <TextBlock Grid.Column="1" VerticalAlignment="Center">
-                                            <Run Text="本地端口：" />
-                                            <Run Text="{Binding CurrentSelectModel.Port}" />
-                                        </TextBlock>
-                                    </Grid>
-                                </Grid>
-                            </HeaderedContentControl>
-
-                            <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"
-                                                    Margin="0 5 0 0">
-                                <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
-                                         Text="{Binding CurrentSelectModel.ReceiveMessage}" TextChanged="TextBox_OnTextChanged" />
-                            </HeaderedContentControl>
-
-                            <Grid Grid.Row="2" ColumnDefinitions="2*,*">
-                                <HeaderedContentControl Grid.Column="0" Theme="{DynamicResource GroupBox}" Header="数据发送窗口"
-                                                        Margin="0 5 0 0">
-                                    <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
-                                             Text="{Binding CurrentSelectModel.SendMessage}" />
-                                </HeaderedContentControl>
-
-                                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
-                                    <Button Content="发送数据" Margin="0 30 0 0" Command="{Binding SendCommand}" />
-                                    <TextBlock Text="重复发送次数" Margin="0 20 0 0" />
-                                    <ComboBox Width="150" Classes="Bordered">
-                                        <ComboBoxItem>1</ComboBoxItem>
-                                        <ComboBoxItem>10</ComboBoxItem>
-                                        <ComboBoxItem>100</ComboBoxItem>
-                                        <ComboBoxItem>1000</ComboBoxItem>
-                                        <ComboBoxItem>10000</ComboBoxItem>
-                                    </ComboBox>
-
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-
-
+                        <page:HandleView 
+                            IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                        
                         <Border Theme="{StaticResource CardBorder}" VerticalAlignment="Top"
                                 IsVisible="{Binding CurrentSelectModel.Ip,Converter={x:Static StringConverters.IsNullOrEmpty}}">
                             <StackPanel Orientation="Vertical" Spacing="30">

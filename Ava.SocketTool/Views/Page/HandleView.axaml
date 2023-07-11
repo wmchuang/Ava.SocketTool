@@ -1,0 +1,59 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dd="clr-namespace:Ava.SocketTool.ViewModels"
+             d:DataContext="{x:Static dd:DesignData.ExampleHandleViewModel}"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Ava.SocketTool.Views.Page.HandleView">
+    <Grid RowDefinitions="1.2*,2*,2.5*,0.5*">
+        <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
+            <Grid RowDefinitions="*,*">
+                <TextBlock Text="{Binding CurrentSelectModel.ServerStateModel.StateText}" Classes="Danger" Margin="0 5 0 0"/>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="启动监听" Classes="Primary" FontSize="10"
+                                Command="{Binding StartListenCommand}"
+                                IsEnabled="{Binding !CurrentSelectModel.ServerStateModel.IsStart}" />
+                        <Button Content="停止监听" Classes="Danger" FontSize="10"
+                                Command="{Binding StopListenCommand}"
+                                IsEnabled="{Binding CurrentSelectModel.ServerStateModel.IsStart}" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                        <Run Text="本地端口：" />
+                        <Run Text="{Binding CurrentSelectModel.Port}" />
+                    </TextBlock>
+                </Grid>
+            </Grid>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"
+                                Margin="0 5 0 0">
+            <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
+                     Text="{Binding CurrentSelectModel.ReceiveMessage}" TextChanged="TextBox_OnTextChanged" />
+        </HeaderedContentControl>
+
+        <Grid Grid.Row="2" ColumnDefinitions="2*,*">
+            <HeaderedContentControl Grid.Column="0" Theme="{DynamicResource GroupBox}" Header="数据发送窗口"
+                                    Margin="0 5 0 0">
+                <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"
+                         Text="{Binding CurrentSelectModel.SendMessage}" />
+            </HeaderedContentControl>
+
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
+                <Button Content="发送数据" Margin="0 30 0 0" Command="{Binding SendCommand}" />
+                <TextBlock Text="重复发送次数" Margin="0 20 0 0" />
+                <ComboBox Width="150" Classes="Bordered">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>10</ComboBoxItem>
+                    <ComboBoxItem>100</ComboBoxItem>
+                    <ComboBoxItem>1000</ComboBoxItem>
+                    <ComboBoxItem>10000</ComboBoxItem>
+                </ComboBox>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
