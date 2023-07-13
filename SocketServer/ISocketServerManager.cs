@@ -15,6 +15,11 @@ public interface ISocketServerManager
     /// 客户端连接时处理
     /// </summary>
     event EventHandler<SessionConnectedEventArgs> SessionConnectedHandler;
+    
+    /// <summary>
+    /// 客户端断开时处理
+    /// </summary>
+    event EventHandler<SessionClosedEventArgs> SessionClosedHandler;
 
     /// <summary>
     /// 创建Tcp Server
@@ -43,4 +48,6 @@ public interface ISocketServerManager
     /// <param name="key"></param>
     /// <returns></returns>
     Task RemoveServer(string key);
+
+
 }

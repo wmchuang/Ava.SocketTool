@@ -28,6 +28,11 @@ public class SocketServerManager : ISocketServerManager
     /// Session Connected 
     /// </summary>
     public event EventHandler<SessionConnectedEventArgs> SessionConnectedHandler;
+    
+    /// <summary>
+    /// Session Close 
+    /// </summary>
+    public event EventHandler<SessionClosedEventArgs> SessionClosedHandler;
 
     public async Task<bool> CreateTcpServer(SocketModel model)
     {
@@ -47,7 +52,13 @@ public class SocketServerManager : ISocketServerManager
                 await Task.Delay(0);
             }, async (session, reason) =>
             {
-                Console.WriteLine($"{DateTime.Now} [SessionHandler] Session {session.RemoteEndPoint} closed: {reason}");
+                SessionClosedHandler?.Invoke(this, new SessionClosedEventArgs()
+                {
+                    ServerId = session.Server.Name,
+                    SessionID = session.SessionID,
+                    RemoteEndPoint = session.RemoteEndPoint,
+                    Reason = reason.Reason
+                });
                 await Task.Delay(0);
             })
 

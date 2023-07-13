@@ -135,5 +135,14 @@ public class MainViewModel : ViewModelBase
                 IsRun = true
             });
         };
+        
+        _serverManager.SessionClosedHandler += (sender, args) =>
+        {
+            var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
+            var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
+
+            var closeSession = server.Children.FirstOrDefault(x => x.Id == args.SessionID);
+            server.Children.Remove(closeSession);
+        };
     }
 }
