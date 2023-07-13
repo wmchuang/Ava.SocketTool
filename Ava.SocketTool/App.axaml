@@ -9,4 +9,13 @@
         <StyleInclude Source="/Controls/Overlay.axaml" />
         <StyleInclude Source="/Styles/IndexTheme.axaml" />
     </Application.Styles>
+    
+    <!-- 系统托盘 -->
+    <!-- <TrayIcon.Icons> -->
+    <!--     <TrayIcons> -->
+    <!--         <TrayIcon Icon="/Assets/avalonia-logo.ico"  -->
+    <!--                   ToolTipText="Ava.SocketTool"> -->
+    <!--         </TrayIcon> -->
+    <!--     </TrayIcons> -->
+    <!-- </TrayIcon.Icons> -->
 </Application>

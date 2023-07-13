@@ -39,7 +39,7 @@ public static class DesignData
     {
         CurrentSelectModel = new SocketTreeModel()
         {
-            TypeEnum = NetTypeEnum.TcpServer,
+            TypeEnum = NetTypeEnum.TcpClient,
             Ip = "127.0.0.1",
             Port = 6000,
             IsRun = false,

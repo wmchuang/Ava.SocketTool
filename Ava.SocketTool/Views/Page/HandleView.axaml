@@ -16,7 +16,7 @@
         <Style Selector="TextBlock.UnStart">
             <Setter Property="Text" Value="已停止" />
         </Style>
-        
+
         <Style Selector="TextBlock.Connected">
             <Setter Property="Text" Value="已连接" />
         </Style>
@@ -24,7 +24,7 @@
             <Setter Property="Text" Value="已断开" />
         </Style>
     </UserControl.Styles>
-    
+
     <UserControl.DataTemplates>
         <dataTemplate:SocketTreeModelTemplateSelector>
             <!-- Tcp Server Node -->
@@ -34,7 +34,7 @@
                                Classes.Success="{Binding IsRun}"
                                Classes.Start="{Binding IsRun}"
                                Classes.Danger="{Binding !IsRun}"
-                               Classes.UnStart="{Binding !IsRun}"/>
+                               Classes.UnStart="{Binding !IsRun}" />
 
                     <Grid Grid.Row="1" ColumnDefinitions="*,*">
                         <StackPanel Orientation="Horizontal" Spacing="10">
@@ -56,15 +56,16 @@
 
             <!-- Tcp Client Node -->
             <DataTemplate x:Key="TcpClient" DataType="model:SocketTreeModel">
-                <Grid RowDefinitions="*,*">
-                    <TextBlock  Margin="0 5 0 0"
-                                Classes.Success="{Binding IsRun}"
-                               Classes.Connected="{Binding IsRun}"
-                               Classes.Danger="{Binding !IsRun}"
-                               Classes.UnConnected="{Binding !IsRun}"/>
+                <Grid ColumnDefinitions="*,*,*">
 
-                    <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Grid RowDefinitions="*,*">
+                        <TextBlock Margin="0 5"
+                                   Classes.Success="{Binding IsRun}"
+                                   Classes.Connected="{Binding IsRun}"
+                                   Classes.Danger="{Binding !IsRun}"
+                                   Classes.UnConnected="{Binding !IsRun}" />
+
+                        <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="1">
                             <Button Content="连接" Classes="Primary" FontSize="10"
                                     Command="{Binding #Control.DataContext.ConnectCommand}"
                                     IsEnabled="{Binding !IsRun}" />
@@ -72,21 +73,36 @@
                                     Command="{Binding #Control.DataContext.CloseCommand}"
                                     IsEnabled="{Binding IsRun}" />
                         </StackPanel>
+                    </Grid>
 
-                        <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Grid.Column="1">
+                        <Run Text="对方IP:"></Run>
+                        <Run Text="127.0.0.1"></Run>
+                    </TextBlock>
+
+                    <Grid Grid.Column="2" RowDefinitions="*,*">
+                        <TextBlock>
+                            <Run Text="对方端口：" />
+                            <Run Text="60000" />
+                        </TextBlock>
+
+                        <TextBlock Grid.Row="1">
                             <Run Text="本地端口：" />
-                            <Run Text="{Binding Port}" />
+                            <Run Text="58000" />
                         </TextBlock>
                     </Grid>
+
                 </Grid>
+
+
             </DataTemplate>
         </dataTemplate:SocketTreeModelTemplateSelector>
     </UserControl.DataTemplates>
 
-    
-    <Grid RowDefinitions="1.2*,2*,2.5*,0.5*">
+
+    <Grid RowDefinitions="Auto,2*,2.5*,0.5*">
         <HeaderedContentControl Grid.Row="0" Theme="{DynamicResource GroupBox}" Header="Socket状态">
-            <ContentControl Content="{Binding CurrentSelectModel}"/>
+            <ContentControl Content="{Binding CurrentSelectModel}" />
         </HeaderedContentControl>
 
         <HeaderedContentControl Grid.Row="1" Theme="{DynamicResource GroupBox}" Header="数据接收及提示窗口"
