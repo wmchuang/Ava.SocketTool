@@ -31,19 +31,19 @@
             <DataTemplate x:Key="TcpServer" DataType="model:SocketTreeModel">
                 <Grid RowDefinitions="*,*">
                     <TextBlock Margin="0 5 0 0"
-                               Classes.Success="{Binding IsStart}"
-                               Classes.Start="{Binding IsStart}"
-                               Classes.Danger="{Binding !IsStart}"
-                               Classes.UnStart="{Binding !IsStart}"/>
+                               Classes.Success="{Binding IsRun}"
+                               Classes.Start="{Binding IsRun}"
+                               Classes.Danger="{Binding !IsRun}"
+                               Classes.UnStart="{Binding !IsRun}"/>
 
                     <Grid Grid.Row="1" ColumnDefinitions="*,*">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Button Content="启动监听" Classes="Primary" FontSize="10"
                                     Command="{Binding #Control.DataContext.StartListenCommand}"
-                                    IsEnabled="{Binding !IsStart}" />
+                                    IsEnabled="{Binding !IsRun}" />
                             <Button Content="停止监听" Classes="Danger" FontSize="10"
                                     Command="{Binding #Control.DataContext.StopListenCommand}"
-                                    IsEnabled="{Binding IsStart}" />
+                                    IsEnabled="{Binding IsRun}" />
                         </StackPanel>
 
                         <TextBlock Grid.Column="1" VerticalAlignment="Center">
@@ -58,19 +58,19 @@
             <DataTemplate x:Key="TcpClient" DataType="model:SocketTreeModel">
                 <Grid RowDefinitions="*,*">
                     <TextBlock  Margin="0 5 0 0"
-                                Classes.Success="{Binding IsConnect}"
-                               Classes.Connected="{Binding IsConnect}"
-                               Classes.Danger="{Binding !IsConnect}"
-                               Classes.UnConnected="{Binding !IsConnect}"/>
+                                Classes.Success="{Binding IsRun}"
+                               Classes.Connected="{Binding IsRun}"
+                               Classes.Danger="{Binding !IsRun}"
+                               Classes.UnConnected="{Binding !IsRun}"/>
 
                     <Grid Grid.Row="1" ColumnDefinitions="*,*">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Button Content="连接" Classes="Primary" FontSize="10"
-                                    Command="{Binding #Control.DataContext.StartListenCommand}"
-                                    IsEnabled="{Binding !IsConnect}" />
+                                    Command="{Binding #Control.DataContext.ConnectCommand}"
+                                    IsEnabled="{Binding !IsRun}" />
                             <Button Content="断开" Classes="Danger" FontSize="10"
-                                    Command="{Binding #Control.DataContext.StopListenCommand}"
-                                    IsEnabled="{Binding IsConnect}" />
+                                    Command="{Binding #Control.DataContext.CloseCommand}"
+                                    IsEnabled="{Binding IsRun}" />
                         </StackPanel>
 
                         <TextBlock Grid.Column="1" VerticalAlignment="Center">

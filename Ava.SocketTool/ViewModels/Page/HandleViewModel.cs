@@ -19,32 +19,31 @@ public class HandleViewModel : ViewModelBase
     {
     }
 
-    public HandleViewModel(ISocketServerManager serverManager,ISocketClientManager clientManager)
+    public HandleViewModel(ISocketServerManager serverManager, ISocketClientManager clientManager)
     {
         _serverManager = serverManager;
         _clientManager = clientManager;
     }
-    
+
     /// <summary>
     /// 当前选择的对象
     /// </summary>
     [Reactive]
     public SocketTreeModel CurrentSelectModel { get; set; } = new SocketTreeModel();
-    
-    
+
     /// <summary>
     /// 开始监听
     /// </summary>
     public ReactiveCommand<Unit, Unit> StartListenCommand => CreateCommand<Unit>(async tree =>
     {
-        var state = await _serverManager.EnableServer(CurrentSelectModel.Key);
-        if (state == null)
+        var result = await _serverManager.StartListen(CurrentSelectModel.Key);
+        if (!result)
         {
-            OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
+            OverlayExtension.ShowDialog(new ErrorDialogView("启动失败"));
         }
         else
         {
-            CurrentSelectModel.IsStart = state == ServerState.Starting;
+            CurrentSelectModel.IsRun = true;
         }
     });
 
@@ -53,24 +52,43 @@ public class HandleViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> StopListenCommand => CreateCommand<Unit>(async tree =>
     {
-        var state = await _serverManager.DisableServer(CurrentSelectModel.Key);
+        var result = await _serverManager.StopListen(CurrentSelectModel.Key);
+        if (!result)
+        {
+            OverlayExtension.ShowDialog(new ErrorDialogView("停止失败"));
+        }
+        else
+        {
+            CurrentSelectModel.IsRun = false;
+        }
+    });
+
+    public ReactiveCommand<Unit, Unit> ConnectCommand => CreateCommand<Unit>(async tree =>
+    {
+        var state = await _clientManager.ConnectAsync(CurrentSelectModel.Key);
         if (state == null)
         {
             OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
         }
         else
         {
-            CurrentSelectModel.IsStart = state == ServerState.Starting;
+            CurrentSelectModel.IsRun = true;
         }
     });
-    
+
+    public ReactiveCommand<Unit, Unit> CloseCommand => CreateCommand<Unit>(async tree =>
+    {
+        await _clientManager.CloseAsync(CurrentSelectModel.Key);
+        CurrentSelectModel.IsRun = false;
+    });
+
     /// <summary>
     /// 发送消息
     /// </summary>
     public ReactiveCommand<Unit, Unit> SendCommand => CreateCommand<Unit>(async tree =>
-    {  
-        await _clientManager.SendMessage(CurrentSelectModel.Key,CurrentSelectModel.SendMessage);
-         
+    {
+        await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
+
         var str = $"{DateTime.Now:HH:mm:dd}发送数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";
         CurrentSelectModel.ReceiveMessage += str;
         CurrentSelectModel.SendMessage = string.Empty;

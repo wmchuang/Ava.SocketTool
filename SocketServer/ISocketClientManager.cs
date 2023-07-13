@@ -1,9 +1,35 @@
+using System.Net;
 using SocketServer.Model;
 
 namespace SocketServer;
 
 public interface ISocketClientManager
 {
-    Task<SocketModel> CreateTcpClient(SocketModel model);
-    Task SendMessage(string key,string message);
+    /// <summary>
+    /// 创建Tcp Client
+    /// </summary>
+    /// <param name="model"></param>
+    void CreateTcpClient(SocketModel model);
+    
+    /// <summary>
+    /// 发送消息
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    Task SendMessage(string key, string message);
+    
+    /// <summary>
+    /// 连接
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    Task<IPEndPoint?> ConnectAsync(string key);
+    
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    Task CloseAsync(string key);
 }

@@ -100,7 +100,7 @@ public class MainViewModel : ViewModelBase
             var model = item.Children.FirstOrDefault(x => x.Id == CurrentSelectModel.Id);
             if (model != null)
             {
-                // StopListenCommand.Execute();
+                await _serverManager.RemoveServer(model.Key);
                 item.Children.Remove(model);
                 CurrentSelectModel = new();
                 break;
@@ -132,7 +132,7 @@ public class MainViewModel : ViewModelBase
             {
                 Id = args.SessionID,
                 TypeEnum = NetTypeEnum.TcpClient,
-                IsConnect = true
+                IsRun = true
             });
         };
     }

@@ -13,7 +13,7 @@
     
     <Grid>
         <StackPanel Orientation="Vertical" Spacing="50" >
-            <TextBlock Text="发生错误" x:Name="ErrorMsg"  Classes="Danger  H4"/>
+            <TextBlock Text="发生错误" x:Name="ErrorMsg"  Classes="Danger  H4" TextWrapping="Wrap"/>
             <Button Classes="Danger" HorizontalAlignment="Center" 
                     Theme="{DynamicResource SolidButton}" Content="确定"
                     Width="80"

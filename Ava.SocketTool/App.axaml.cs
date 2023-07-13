@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Ava.SocketTool.ViewModels;
 using Ava.SocketTool.Views;
 using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 
 namespace Ava.SocketTool;
 
@@ -33,6 +34,8 @@ public partial class App : Application
                 DataContext = vm
             };
         }
+
+        RxApp.DefaultExceptionHandler = new ReactiveExceptionHandle();
 
         base.OnFrameworkInitializationCompleted();
     }

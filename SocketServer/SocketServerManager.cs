@@ -29,7 +29,7 @@ public class SocketServerManager : ISocketServerManager
     /// </summary>
     public event EventHandler<SessionConnectedEventArgs> SessionConnectedHandler;
 
-    public async Task<ServerState> CreateTcpServer(SocketModel model)
+    public async Task<bool> CreateTcpServer(SocketModel model)
     {
         //创建宿主：用Package的类型和PipelineFilter的类型创建SuperSocket宿主。
         var server = SuperSocketHostBuilder.Create<TextPackageInfo, MyPipelineFilter>()
@@ -82,32 +82,43 @@ public class SocketServerManager : ISocketServerManager
         await server.StartAsync();
 
         var service = server.ServiceProvider.GetService<MyService>();
-        return service.State;
+        return service.State == ServerState.Started;
     }
 
-    public async Task<ServerState?> EnableServer(string key)
+    public async Task<bool> StartListen(string key)
     {
         if (_tcpServer.TryGetValue(key, out var server))
         {
             _cts = new CancellationTokenSource();
             var service = server.ServiceProvider.GetService<MyService>();
             await service.StartAsync(_cts.Token);
-            return service.State;
+            return service.State == ServerState.Started;
         }
 
-        return null;
+        return false;
     }
 
-    public async Task<ServerState?> DisableServer(string key)
+    public async Task<bool> StopListen(string key)
     {
         if (_tcpServer.TryGetValue(key, out var server))
         {
             _cts = new CancellationTokenSource();
             var service = server.ServiceProvider.GetService<MyService>();
             await service.StopAsync(_cts.Token);
-            return service.State;
+            return service.State == ServerState.Started;
+            ;
         }
 
-        return null;
+        return false;
+    }
+
+    public async Task RemoveServer(string key)
+    {
+        if (_tcpServer.TryRemove(key, out var server))
+        {
+            _cts = new CancellationTokenSource();
+            var service = server.ServiceProvider.GetService<MyService>();
+            await service.StopAsync(_cts.Token);
+        }
     }
 }

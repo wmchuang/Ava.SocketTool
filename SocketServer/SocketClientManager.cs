@@ -10,50 +10,61 @@ namespace SocketServer;
 
 public class SocketClientManager : ISocketClientManager
 {
-    private static ConcurrentDictionary<string, IEasyClient<TextPackageInfo>> _tcpClients = new();
-    
+    private static ConcurrentDictionary<string, MyClient<TextPackageInfo>> _tcpClients = new();
+
     private static CancellationTokenSource _cts = new();
 
-    public async Task<SocketModel> CreateTcpClient(SocketModel model)
+    public void CreateTcpClient(SocketModel model)
     {
         var filter = new MyPipelineFilter();
-        var easyClient = new MyClient<TextPackageInfo>(filter);
-       
-        var client = easyClient.AsClient();
+        var myClient = new MyClient<TextPackageInfo>(filter);
+
         // 解析 IP 地址
         var ipAddress = IPAddress.Parse(model.Ip);
         // 创建 IPEndPoint
         var ipEndPoint = new IPEndPoint(ipAddress, model.Port);
-        
-        await client.ConnectAsync(ipEndPoint);
-        
-        client.StartReceive();
 
+        myClient.RemoteEndPoint = ipEndPoint;
 
-        var channel = easyClient.GetChannel();
-       if(channel.LocalEndPoint is IPEndPoint point)
-       {
-           model.ClientModel = new SocketModel()
-           {
-               Ip = point.Address.ToString(),
-               Port = point.Port
-           };
-       }
+        _tcpClients.TryAdd(model.Key, myClient);
 
-        _tcpClients.TryAdd(model.Key, client);
-       
-        return model;
     }
-    
-    
-    public async Task SendMessage(string key,string message)
+
+    public async Task SendMessage(string key, string message)
     {
-        if (_tcpClients.TryGetValue(key, out var client))
+        if (_tcpClients.TryGetValue(key, out var myClient))
         {
             var bytes = Encoding.GetEncoding("GBK").GetBytes(message);
+            var client = myClient.AsClient();
             await client.SendAsync(bytes);
         }
+    }
 
-     
+    public async Task<IPEndPoint?> ConnectAsync(string key)
+    {
+        if (_tcpClients.TryGetValue(key, out var myClient))
+        {
+            var client = myClient.AsClient();
+            await client.ConnectAsync(myClient.RemoteEndPoint);
+
+            var channel = myClient.GetChannel();
+            if (channel == null) return null;
+            
+            if (channel.LocalEndPoint is IPEndPoint point)
+            {
+                return point;
+            }
+        }
+
+        return null;
+    }
+    
+    public async Task CloseAsync(string key)
+    {
+        if (_tcpClients.TryGetValue(key, out var myClient))
+        {
+            var client = myClient.AsClient();
+            await client.CloseAsync();
+        }
     }
 }

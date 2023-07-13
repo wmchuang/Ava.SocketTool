@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Threading.Tasks;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.Models;
 using Ava.SocketTool.Models.Dialog;
@@ -16,7 +17,7 @@ public class CreateNodeViewModel : ViewModelBase
 {
     private readonly ISocketServerManager _serverManager;
     private readonly ISocketClientManager _clientManager;
-    public MainViewModel Owner { get; set; }
+    private MainViewModel Owner { get; set; }
 
     public NodeModel NodeModel { get; set; }
 
@@ -51,34 +52,49 @@ public class CreateNodeViewModel : ViewModelBase
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpServer)
         {
-            var state = await _serverManager.CreateTcpServer(new SocketModel()
-            {
-                Id = socketModel.Id,
-                Ip = socketModel.Ip,
-                Port = socketModel.Port,
-            });
-            if (state == ServerState.Failed)
-            {
-                OverlayExtension.ShowDialog(new ErrorDialogView("创建失败，端口可能被占用！"));
-                return;
-            }
-
-            socketModel.IsStart = state == ServerState.Starting;
+            if (!await CreateTcpServer(socketModel)) return;
         }
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpClient)
         {
-            var model = new SocketModel()
-            {
-                Id = socketModel.Id,
-                Ip = socketModel.Ip,
-                Port = socketModel.Port,
-            };
-            model = await _clientManager.CreateTcpClient(model);
-            socketModel.SetName(model.ClientModel.Ip,model.ClientModel.Port);
+            await CreateTcpClient(socketModel);
         }
 
         Owner.Add(NodeModel.TypeEnum, socketModel);
         await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
     });
+
+    private async Task<bool> CreateTcpServer(SocketTreeModel socketModel)
+    {
+        var result = await _serverManager.CreateTcpServer(new SocketModel
+        {
+            Id = socketModel.Id,
+            Ip = socketModel.Ip,
+            Port = socketModel.Port,
+        });
+        if (!result)
+        {
+            OverlayExtension.ShowDialog(new ErrorDialogView("创建失败，端口可能被占用！"));
+            return false;
+        }
+
+        socketModel.IsRun = true;
+        return true;
+    }
+
+    private async Task CreateTcpClient(SocketTreeModel socketModel)
+    {
+        var model = new SocketModel
+        {
+            Id = socketModel.Id,
+            Ip = socketModel.Ip,
+            Port = socketModel.Port,
+        };
+        _clientManager.CreateTcpClient(model);
+        var point = await _clientManager.ConnectAsync(model.Key);
+        if (point != null)
+        {
+            socketModel.IsRun = true;
+        }
+    }
 }

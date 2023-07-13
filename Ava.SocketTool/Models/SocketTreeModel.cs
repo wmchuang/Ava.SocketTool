@@ -48,14 +48,11 @@ public class SocketTreeModel : ModelBase
     /// </summary>
     public int Port { get; set; }
 
-    [Reactive]
-    public bool IsStart { get; set; }
-
     /// <summary>
-    /// 是否连接
+    /// 是否正在运行
     /// </summary>
     [Reactive]
-    public bool IsConnect { get; set; }
+    public bool IsRun { get; set; }
 
     /// <summary>
     /// Send Message
