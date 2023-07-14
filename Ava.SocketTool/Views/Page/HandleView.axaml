@@ -69,7 +69,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="1">
                             <Button Content="连接" Classes="Primary" FontSize="10"
                                     Command="{Binding #Control.DataContext.ConnectCommand}"
-                                    IsEnabled="{Binding !IsRun}" />
+                                    IsEnabled="{Binding !IsRun}"
+                                    IsVisible="{Binding SessionId,Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
                             <Button Content="断开" Classes="Danger" FontSize="10"
                                     Command="{Binding #Control.DataContext.CloseCommand}"
                                     IsEnabled="{Binding IsRun}" />

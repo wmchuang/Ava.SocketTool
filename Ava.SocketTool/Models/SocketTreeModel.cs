@@ -77,6 +77,12 @@ public class SocketTreeModel : ModelBase
     public string ReceiveMessage { get; set; }
 
     /// <summary>
+    /// SessionID 只有Client的时候可能有值
+    /// </summary>
+    [Reactive]
+    public string SessionId { get; set; } = string.Empty;
+
+    /// <summary>
     /// Children data
     /// </summary>
     [Reactive]

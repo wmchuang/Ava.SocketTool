@@ -68,7 +68,7 @@ public class HandleViewModel : ViewModelBase
         var ipEndPoint = await _clientManager.ConnectAsync(CurrentSelectModel.Key);
         if (ipEndPoint == null)
         {
-            OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
+            OverlayExtension.ShowDialog(new ErrorDialogView("连接失败"));
         }
         else
         {
@@ -80,8 +80,11 @@ public class HandleViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> CloseCommand => CreateCommand<Unit>(async tree =>
     {
         await _clientManager.CloseAsync(CurrentSelectModel.Key);
-        CurrentSelectModel.IsRun = false;
-        CurrentSelectModel.LocalEndPoint = null;
+        
+        if (!string.IsNullOrWhiteSpace(CurrentSelectModel.SessionId))
+        {
+            await _serverManager.CloseSession(CurrentSelectModel.LocalEndPoint, CurrentSelectModel.SessionId);
+        }
     });
 
     /// <summary>

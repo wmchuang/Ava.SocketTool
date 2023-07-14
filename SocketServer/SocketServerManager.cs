@@ -117,9 +117,22 @@ public class SocketServerManager : ISocketServerManager
             _cts = new CancellationTokenSource();
             var service = server.ServiceProvider.GetService<MyService>();
             await service.StopAsync(_cts.Token);
-            return service.State == ServerState.Started;
+            return service.State == ServerState.Stopped;
         }
 
+        return false;
+    }
+    
+    public async Task<bool> CloseSession(IPEndPoint remoteIpEndPoint,string sessionId)
+    {
+        var matchData = _tcpServer.FirstOrDefault(x => x.Key.Contains(remoteIpEndPoint.ToString()));
+        if (!string.IsNullOrEmpty(matchData.Key))
+        {
+            var service = matchData.Value.ServiceProvider.GetService<MyService>();
+            await service.CloseSessionAsync(sessionId);
+            return true;
+        }
+        
         return false;
     }
 

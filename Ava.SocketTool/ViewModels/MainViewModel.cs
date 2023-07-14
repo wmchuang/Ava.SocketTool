@@ -127,6 +127,7 @@ public class MainViewModel : ViewModelBase
             server.Children.Add(new SocketTreeModel(NetTypeEnum.TcpClient,(IPEndPoint)args.RemoteEndPoint)
             {
                 Id = args.SessionID,
+                SessionId = args.SessionID,
                 LocalEndPoint = (IPEndPoint)args.LocalEndPoint,
                 IsRun = true
             });
@@ -134,11 +135,21 @@ public class MainViewModel : ViewModelBase
 
         _serverManager.SessionClosedHandler += (sender, args) =>
         {
+            //删除Server下的Client节点
             var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
             var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
 
             var closeSession = server.Children.FirstOrDefault(x => x.Id == args.SessionID);
             server.Children.Remove(closeSession);
+            
+            //找到Client下的节点，改变其状态
+            var tcpClient = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpClient);
+            var client = tcpClient.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, args.RemoteEndPoint));
+            if (client != null)
+            {
+                client.IsRun = false;
+                client.LocalEndPoint = null;
+            }
         };
     }
 }

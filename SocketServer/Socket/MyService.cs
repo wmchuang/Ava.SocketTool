@@ -18,15 +18,25 @@ public class MyService : SuperSocketService<TextPackageInfo>
         _tokenSource = new CancellationTokenSource();
     }
 
-
-    protected override ValueTask OnStopAsync()
+    protected override async ValueTask OnStopAsync()
     {
         var sessionContainer = this.GetSessionContainer().GetSessions();
         foreach (var session in sessionContainer)
         {
-            session.CloseAsync(CloseReason.LocalClosing);
+            await session.CloseAsync(CloseReason.LocalClosing);
         }
 
-        return base.OnStopAsync();
+        await base.OnStopAsync();
+    }
+
+    public async Task CloseSessionAsync(string sessionId)
+    {
+        var sessionContainer = this.GetSessionContainer().GetSessions();
+
+        var session = sessionContainer.FirstOrDefault(x => x.SessionID == sessionId);
+        if (session != null)
+        {
+            await session.CloseAsync(CloseReason.LocalClosing);
+        }
     }
 }

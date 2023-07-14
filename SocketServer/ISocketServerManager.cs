@@ -1,4 +1,5 @@
-﻿using SocketServer.EventArg;
+﻿using System.Net;
+using SocketServer.EventArg;
 using SocketServer.Model;
 using SuperSocket;
 
@@ -49,5 +50,11 @@ public interface ISocketServerManager
     /// <returns></returns>
     Task RemoveServer(string key);
 
-
+    /// <summary>
+    /// 关闭客户端连接
+    /// </summary>
+    /// <param name="remoteIpEndPoint"></param>
+    /// <param name="sessionId"></param>
+    /// <returns></returns>
+    Task<bool> CloseSession(IPEndPoint remoteIpEndPoint,string sessionId);
 }
