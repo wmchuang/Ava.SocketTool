@@ -65,13 +65,14 @@ public class HandleViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> ConnectCommand => CreateCommand<Unit>(async tree =>
     {
-        var state = await _clientManager.ConnectAsync(CurrentSelectModel.Key);
-        if (state == null)
+        var ipEndPoint = await _clientManager.ConnectAsync(CurrentSelectModel.Key);
+        if (ipEndPoint == null)
         {
             OverlayExtension.ShowDialog(new ErrorDialogView("操作失败"));
         }
         else
         {
+            CurrentSelectModel.LocalEndPoint = ipEndPoint;
             CurrentSelectModel.IsRun = true;
         }
     });
@@ -80,6 +81,7 @@ public class HandleViewModel : ViewModelBase
     {
         await _clientManager.CloseAsync(CurrentSelectModel.Key);
         CurrentSelectModel.IsRun = false;
+        CurrentSelectModel.LocalEndPoint = null;
     });
 
     /// <summary>

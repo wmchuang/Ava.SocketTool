@@ -5,6 +5,7 @@
              xmlns:dd="clr-namespace:Ava.SocketTool.ViewModels"
              xmlns:dataTemplate="clr-namespace:Ava.SocketTool.DataTemplate"
              xmlns:model="clr-namespace:Ava.SocketTool.Models"
+             xmlns:cv="clr-namespace:Ava.SocketTool.Convert"
              d:DataContext="{x:Static dd:DesignData.ExampleHandleViewModel}"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Control"
@@ -30,7 +31,7 @@
             <!-- Tcp Server Node -->
             <DataTemplate x:Key="TcpServer" DataType="model:SocketTreeModel">
                 <Grid RowDefinitions="*,*">
-                    <TextBlock Margin="0 5 0 0"
+                    <TextBlock Margin="0 5"
                                Classes.Success="{Binding IsRun}"
                                Classes.Start="{Binding IsRun}"
                                Classes.Danger="{Binding !IsRun}"
@@ -48,7 +49,7 @@
 
                         <TextBlock Grid.Column="1" VerticalAlignment="Center">
                             <Run Text="本地端口：" />
-                            <Run Text="{Binding Port}" />
+                            <Run Text="{Binding LocalEndPoint.Port}" />
                         </TextBlock>
                     </Grid>
                 </Grid>
@@ -77,18 +78,18 @@
 
                     <TextBlock Grid.Column="1">
                         <Run Text="对方IP:"></Run>
-                        <Run Text="127.0.0.1"></Run>
+                        <Run Text="{Binding RemoteEndPoint.Address,Converter={x:Static cv:IpAddressToIpConverter.Instance}}"></Run>
                     </TextBlock>
 
                     <Grid Grid.Column="2" RowDefinitions="*,*">
                         <TextBlock>
                             <Run Text="对方端口：" />
-                            <Run Text="60000" />
+                            <Run Text="{Binding RemoteEndPoint.Port}" />
                         </TextBlock>
 
                         <TextBlock Grid.Row="1">
                             <Run Text="本地端口：" />
-                            <Run Text="58000" />
+                            <Run Text="{Binding LocalEndPoint.Port}" />
                         </TextBlock>
                     </Grid>
 

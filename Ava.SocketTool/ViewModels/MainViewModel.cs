@@ -44,10 +44,7 @@ public class MainViewModel : ViewModelBase
         var list = EnumExtension.GetList<NetTypeEnum>();
         foreach (var item in list)
         {
-            TreeDataList.Add(new SocketTreeModel(item.Description)
-            {
-                TypeEnum = item.Type,
-            });
+            TreeDataList.Add(new SocketTreeModel(item.Type, item.Description));
         }
     }
 
@@ -127,15 +124,14 @@ public class MainViewModel : ViewModelBase
             var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
             var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
 
-            var sp = args.RemoteEndPoint.ToString().Split(':');
-            server.Children.Add(new SocketTreeModel(sp[0], System.Convert.ToInt32(sp[1]))
+            server.Children.Add(new SocketTreeModel(NetTypeEnum.TcpClient,(IPEndPoint)args.RemoteEndPoint)
             {
                 Id = args.SessionID,
-                TypeEnum = NetTypeEnum.TcpClient,
+                LocalEndPoint = (IPEndPoint)args.LocalEndPoint,
                 IsRun = true
             });
         };
-        
+
         _serverManager.SessionClosedHandler += (sender, args) =>
         {
             var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);

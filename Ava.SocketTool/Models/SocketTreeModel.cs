@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Net;
 using ReactiveUI.Fody.Helpers;
-using SuperSocket;
 
 namespace Ava.SocketTool.Models;
 
@@ -11,16 +11,24 @@ public class SocketTreeModel : ModelBase
     {
     }
 
-    public SocketTreeModel(string name)
+    public SocketTreeModel(NetTypeEnum typeEnum)
     {
-        Name = name;
+        TypeEnum = typeEnum;
     }
 
-    public SocketTreeModel(string ip, int port)
+    public SocketTreeModel(NetTypeEnum typeEnum, string displayName) : this(typeEnum)
     {
-        Ip = ip;
-        Port = port;
-        SetName(ip, port);
+        DisplayName = displayName;
+    }
+
+    public SocketTreeModel(NetTypeEnum typeEnum, IPEndPoint ipEndPoint) : this(typeEnum)
+    {
+        if (TypeEnum == NetTypeEnum.TcpServer || TypeEnum == NetTypeEnum.UdpServer)
+            LocalEndPoint = ipEndPoint;
+        else
+            RemoteEndPoint = ipEndPoint;
+
+        SetDisplayName(ipEndPoint);
     }
 
     /// <summary>
@@ -29,9 +37,9 @@ public class SocketTreeModel : ModelBase
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     /// <summary>
-    /// Name
+    /// UI 显示名称
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
     /// NetTypeEnum
@@ -39,14 +47,16 @@ public class SocketTreeModel : ModelBase
     public NetTypeEnum TypeEnum { get; set; }
 
     /// <summary>
-    /// Ip
+    /// 本地地址
     /// </summary>
-    public string Ip { get; set; }
+    [Reactive]
+    public IPEndPoint LocalEndPoint { get; set; }
 
     /// <summary>
-    /// Port
+    /// 远程地址
     /// </summary>
-    public int Port { get; set; }
+    [Reactive]
+    public IPEndPoint RemoteEndPoint { get; set; }
 
     /// <summary>
     /// 是否正在运行
@@ -72,10 +82,22 @@ public class SocketTreeModel : ModelBase
     [Reactive]
     public ObservableCollection<SocketTreeModel> Children { get; set; } = new();
 
-    public string Key => $"{Id}_{Ip}:{Port}";
-
-    public void SetName(string ip, int port)
+    public string Key
     {
-        Name = $"{ip}[{port}]";
+        get
+        {
+            if ((TypeEnum == NetTypeEnum.TcpServer || TypeEnum == NetTypeEnum.UdpServer) && LocalEndPoint != null)
+                return $"{Id}_{LocalEndPoint}";
+            
+            if ((TypeEnum == NetTypeEnum.TcpClient || TypeEnum == NetTypeEnum.UdpClient) && RemoteEndPoint != null)
+                return $"{Id}_{RemoteEndPoint}";
+
+            return string.Empty;
+        }
+    }
+
+    private void SetDisplayName(IPEndPoint ipEndPoint)
+    {
+        DisplayName = $"{ipEndPoint.Address}[{ipEndPoint.Port}]";
     }
 }

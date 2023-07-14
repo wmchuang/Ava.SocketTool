@@ -17,14 +17,10 @@ public class SocketClientManager : ISocketClientManager
     public void CreateTcpClient(SocketModel model)
     {
         var filter = new MyPipelineFilter();
-        var myClient = new MyClient<TextPackageInfo>(filter);
-
-        // 解析 IP 地址
-        var ipAddress = IPAddress.Parse(model.Ip);
-        // 创建 IPEndPoint
-        var ipEndPoint = new IPEndPoint(ipAddress, model.Port);
-
-        myClient.RemoteEndPoint = ipEndPoint;
+        var myClient = new MyClient<TextPackageInfo>(filter)
+        {
+            RemoteEndPoint = model.LocalEndPoint
+        };
 
         _tcpClients.TryAdd(model.Key, myClient);
 

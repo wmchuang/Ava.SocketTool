@@ -47,7 +47,8 @@ public class SocketServerManager : ISocketServerManager
                 {
                     ServerId = session.Server.Name,
                     SessionID = session.SessionID,
-                    RemoteEndPoint = session.RemoteEndPoint
+                    RemoteEndPoint = session.RemoteEndPoint,
+                    LocalEndPoint = session.LocalEndPoint
                 });
                 await Task.Delay(0);
             }, async (session, reason) =>
@@ -81,8 +82,8 @@ public class SocketServerManager : ISocketServerManager
                 {
                     new ListenOptions
                     {
-                        Ip = model.Ip,
-                        Port = model.Port
+                        Ip = model.LocalEndPoint.Address.ToString(),
+                        Port = model.LocalEndPoint.Port
                     }
                 }.ToList();
             })
@@ -117,7 +118,6 @@ public class SocketServerManager : ISocketServerManager
             var service = server.ServiceProvider.GetService<MyService>();
             await service.StopAsync(_cts.Token);
             return service.State == ServerState.Started;
-            ;
         }
 
         return false;

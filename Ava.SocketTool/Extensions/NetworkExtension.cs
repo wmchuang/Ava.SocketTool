@@ -9,35 +9,31 @@ namespace Ava.SocketTool.Extensions;
 
 public class NetworkExtension
 {
-    
     static List<IPAddress> GetNonLoopbackIPs()
     {
         return Dns.GetHostAddresses(Dns.GetHostName())
             .Where(ip => !IPAddress.IsLoopback(ip))
             .ToList();
     }
-    
-    
+
     static List<IPAddress> GetLocalIPs()
     {
         return NetworkInterface.GetAllNetworkInterfaces()
-            .Where(nic => nic.OperationalStatus == OperationalStatus.Up && !nic.Description.Contains("Virtual")) 
+            .Where(nic => nic.OperationalStatus == OperationalStatus.Up && !nic.Description.Contains("Virtual"))
             .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
             .Where(addr => addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
             .Select(addr => addr.Address)
             .ToList();
     }
+
     /// <summary>
     /// 获取ip
     /// </summary>
     /// <returns></returns>
-    public static string GetIp()
+    public static IPAddress GetIp()
     {
         try
         {
-
-
-
             var ipEntry = GetLocalIPs();
             foreach (var ip in ipEntry)
             {
@@ -46,16 +42,16 @@ public class NetworkExtension
                 //AddressFamily.InterNetworkV6表示此地址为IPv6类型
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    return ip.ToString();
+                    return ip;
                 }
             }
 
-            return "127.0.0.1";
+            return IPAddress.Loopback;
         }
         catch (System.Exception e)
         {
             Console.WriteLine(e.Message);
-            return "127.0.0.1";
+            return IPAddress.Loopback;
         }
     }
 }

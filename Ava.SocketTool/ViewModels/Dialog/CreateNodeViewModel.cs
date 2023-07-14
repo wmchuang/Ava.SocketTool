@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Reactive;
 using System.Threading.Tasks;
 using Ava.SocketTool.Extensions;
@@ -45,10 +46,8 @@ public class CreateNodeViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> CreateCommand => CreateCommand<Unit>(async _ =>
     {
-        var socketModel = new SocketTreeModel(NetworkExtension.GetIp(), NodeModel.Port)
-        {
-            TypeEnum = NodeModel.TypeEnum
-        };
+        var ipEndPoint = new IPEndPoint(NetworkExtension.GetIp(), NodeModel.Port);
+        var socketModel = new SocketTreeModel(NodeModel.TypeEnum, ipEndPoint);
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpServer)
         {
@@ -69,8 +68,7 @@ public class CreateNodeViewModel : ViewModelBase
         var result = await _serverManager.CreateTcpServer(new SocketModel
         {
             Id = socketModel.Id,
-            Ip = socketModel.Ip,
-            Port = socketModel.Port,
+            LocalEndPoint = socketModel.LocalEndPoint
         });
         if (!result)
         {
@@ -87,14 +85,14 @@ public class CreateNodeViewModel : ViewModelBase
         var model = new SocketModel
         {
             Id = socketModel.Id,
-            Ip = socketModel.Ip,
-            Port = socketModel.Port,
+            LocalEndPoint = socketModel.RemoteEndPoint
         };
         _clientManager.CreateTcpClient(model);
-        var point = await _clientManager.ConnectAsync(model.Key);
-        if (point != null)
-        {
-            socketModel.IsRun = true;
-        }
+        // var point = await _clientManager.ConnectAsync(model.Key);
+        // if (point != null)
+        // {
+        //     socketModel.LocalEndPoint = point;
+        //     socketModel.IsRun = true;
+        // }
     }
 }

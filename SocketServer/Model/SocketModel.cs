@@ -1,4 +1,6 @@
-﻿namespace SocketServer.Model;
+﻿using System.Net;
+
+namespace SocketServer.Model;
 
 public class SocketModel
 {
@@ -8,16 +10,9 @@ public class SocketModel
     public string Id { get; set; }
 
     /// <summary>
-    /// Ip
+    /// 本地地址
     /// </summary>
-    public string Ip { get; set; }
-
-    /// <summary>
-    /// 端口
-    /// </summary>
-    public int Port { get; set; }
-
-    public SocketModel ClientModel { get; set; }
-
-    public string Key => $"{Id}_{Ip}:{Port}";
+    public IPEndPoint LocalEndPoint { get; set; }
+    
+    public string Key => $"{Id}_{LocalEndPoint.ToString()}";
 }

@@ -1,4 +1,5 @@
-﻿using Ava.SocketTool.Extensions;
+﻿using System.Net;
+using Ava.SocketTool.Extensions;
 using ReactiveUI.Fody.Helpers;
 
 namespace Ava.SocketTool.Models.Dialog;
@@ -14,7 +15,7 @@ public class NodeModel : ModelBase
     /// Ip
     /// </summary>
     [Reactive]
-    public string Ip { get; set; } = NetworkExtension.GetIp();
+    public IPAddress Ip { get; set; } = NetworkExtension.GetIp();
 
     /// <summary>
     /// Port

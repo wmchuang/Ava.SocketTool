@@ -7,8 +7,8 @@ namespace SocketServer.Socket;
 
 public class MyClient<TReceivePackage> : EasyClient<TReceivePackage> where TReceivePackage : class
 {
-    
-   public IPEndPoint RemoteEndPoint { get; set; }
+    public IPEndPoint RemoteEndPoint { get; set; }
+
     public MyClient(IPipelineFilter<TReceivePackage> pipelineFilter) : base(pipelineFilter)
     {
     }
@@ -17,5 +17,4 @@ public class MyClient<TReceivePackage> : EasyClient<TReceivePackage> where TRece
     {
         return Channel;
     }
-
 }

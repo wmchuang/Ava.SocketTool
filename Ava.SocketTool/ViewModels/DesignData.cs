@@ -11,7 +11,6 @@ public static class DesignData
     {
         CurrentSelectModel = new SocketTreeModel()
         {
-            Port = 60000,
             IsRun = false,
             
         },
@@ -19,16 +18,16 @@ public static class DesignData
         {
             new()
             {
-                Name = "TCP Server",
+                DisplayName = "TCP Server",
                 Children = new ObservableCollection<SocketTreeModel>()
                 {
                     new()
                     {
-                        Name = "127.0.0.0.1:[60000]",
+                        DisplayName = "127.0.0.0.1:[60000]",
                     },
                     new()
                     {
-                        Name = "127.0.0.0.1:[60001]",
+                        DisplayName = "127.0.0.0.1:[60001]",
                     }
                 }
             }
@@ -40,8 +39,6 @@ public static class DesignData
         CurrentSelectModel = new SocketTreeModel()
         {
             TypeEnum = NetTypeEnum.TcpClient,
-            Ip = "127.0.0.1",
-            Port = 6000,
             IsRun = false,
         }
     };
