@@ -51,10 +51,19 @@ public interface ISocketServerManager
     Task RemoveServer(string key);
 
     /// <summary>
-    /// 关闭客户端连接
+    /// 关闭Client连接
     /// </summary>
     /// <param name="remoteIpEndPoint"></param>
     /// <param name="sessionId"></param>
     /// <returns></returns>
     Task<bool> CloseSession(IPEndPoint remoteIpEndPoint,string sessionId);
+
+    /// <summary>
+    /// 给Client发送消息
+    /// </summary>
+    /// <param name="remoteIpEndPoint"></param>
+    /// <param name="sessionId"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    Task<bool> SendMessage(IPEndPoint remoteIpEndPoint, string sessionId, string message);
 }

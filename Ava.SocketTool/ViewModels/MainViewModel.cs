@@ -12,6 +12,8 @@ using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using ReactiveUI;
 using SocketServer;
+using SocketServer.Socket;
+using SuperSocket.ProtoBase;
 
 namespace Ava.SocketTool.ViewModels;
 
@@ -150,6 +152,17 @@ public class MainViewModel : ViewModelBase
                 client.IsRun = false;
                 client.LocalEndPoint = null;
             }
+        };
+        
+        _clientManager.PackageHandler += (sender, args) =>
+        {
+            var tcpClient = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpClient);
+            var client = tcpClient.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, sender));
+            
+            var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
+            client.ReceiveMessage += str;
+           
+         
         };
     }
 }

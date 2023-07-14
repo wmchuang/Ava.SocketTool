@@ -92,7 +92,14 @@ public class HandleViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> SendCommand => CreateCommand<Unit>(async tree =>
     {
-        await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
+        if (!string.IsNullOrWhiteSpace(CurrentSelectModel.SessionId))
+        {
+            await _serverManager.SendMessage(CurrentSelectModel.LocalEndPoint, CurrentSelectModel.SessionId, CurrentSelectModel.SendMessage);
+        }
+        else
+        {
+            await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
+        }
 
         var str = $"{DateTime.Now:HH:mm:dd}发送数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";
         CurrentSelectModel.ReceiveMessage += str;

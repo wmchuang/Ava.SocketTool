@@ -17,4 +17,9 @@ public class MyClient<TReceivePackage> : EasyClient<TReceivePackage> where TRece
     {
         return Channel;
     }
+
+    protected override ValueTask<TReceivePackage> ReceiveAsync()
+    {
+        return base.ReceiveAsync();
+    }
 }

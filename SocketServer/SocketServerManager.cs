@@ -135,6 +135,19 @@ public class SocketServerManager : ISocketServerManager
         
         return false;
     }
+    
+    public async Task<bool> SendMessage(IPEndPoint remoteIpEndPoint,string sessionId,string message)
+    {
+        var matchData = _tcpServer.FirstOrDefault(x => x.Key.Contains(remoteIpEndPoint.ToString()));
+        if (!string.IsNullOrEmpty(matchData.Key))
+        {
+            var service = matchData.Value.ServiceProvider.GetService<MyService>();
+            await service.SendMessageAsync(sessionId, message);
+            return true;
+        }
+        
+        return false;
+    }
 
     public async Task RemoveServer(string key)
     {
