@@ -112,10 +112,10 @@
                             <Run Text="{Binding RemoteEndPoint.Port}" />
                         </TextBlock>
 
-                        <TextBlock Grid.Row="1">
-                            <Run Text="本地端口：" />
-                            <Run Text="{Binding LocalEndPoint.Port}" />
-                        </TextBlock>
+                        <!-- <TextBlock Grid.Row="1"> -->
+                        <!--     <Run Text="本地端口：" /> -->
+                        <!--     <Run Text="{Binding LocalEndPoint.Port}" /> -->
+                        <!-- </TextBlock> -->
                     </Grid>
 
                 </Grid>
