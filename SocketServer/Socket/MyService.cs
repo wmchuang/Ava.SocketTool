@@ -43,20 +43,30 @@ public class MyService : SuperSocketService<TextPackageInfo>
             await session.CloseAsync(CloseReason.LocalClosing);
         }
     }
-    
+
     /// <summary>
     /// 发送消息
     /// </summary>
     /// <param name="sessionId"></param>
     /// <param name="message"></param>
-    public async Task SendMessageAsync(string sessionId,string message)
+    public async Task SendMessageAsync(string message, string sessionId = "")
     {
         var sessionContainer = this.GetSessionContainer().GetSessions();
 
-        var session = sessionContainer.FirstOrDefault(x => x.SessionID == sessionId);
-        if (session != null)
+        if (string.IsNullOrWhiteSpace(sessionId))
         {
-            await session.SendAsync(DefaultEncoder.Encoding.GetBytes(message));
+            foreach (var session in sessionContainer)
+            {
+                await session.SendAsync(DefaultEncoder.Encoding.GetBytes(message));
+            }
+        }
+        else
+        {
+            var session = sessionContainer.FirstOrDefault(x => x.SessionID == sessionId);
+            if (session != null)
+            {
+                await session.SendAsync(DefaultEncoder.Encoding.GetBytes(message));
+            }
         }
     }
 }

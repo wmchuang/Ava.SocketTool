@@ -26,8 +26,9 @@ public interface ISocketServerManager
     /// 创建Tcp Server
     /// </summary>
     /// <param name="model"></param>
+    /// <param name="isTcpServer"></param>
     /// <returns></returns>
-    Task<bool> CreateTcpServer(SocketModel model);
+    Task<bool> CreateServer(SocketModel model,bool isTcpServer = true);
 
     /// <summary>
     /// 启动监听
@@ -65,5 +66,5 @@ public interface ISocketServerManager
     /// <param name="sessionId"></param>
     /// <param name="message"></param>
     /// <returns></returns>
-    Task<bool> SendMessage(IPEndPoint remoteIpEndPoint, string sessionId, string message);
+    Task<bool> SendMessage(IPEndPoint remoteIpEndPoint, string sessionId, string message = "");
 }

@@ -16,7 +16,7 @@ namespace SocketServer;
 
 public class SocketServerManager : ISocketServerManager
 {
-    private static ConcurrentDictionary<string, IServer> _tcpServer = new ConcurrentDictionary<string, IServer>();
+    private static ConcurrentDictionary<string, IServer> _tcpServer = new();
     private static CancellationTokenSource _cts = new();
 
     /// <summary>
@@ -28,16 +28,16 @@ public class SocketServerManager : ISocketServerManager
     /// Session Connected 
     /// </summary>
     public event EventHandler<SessionConnectedEventArgs> SessionConnectedHandler;
-    
+
     /// <summary>
     /// Session Close 
     /// </summary>
     public event EventHandler<SessionClosedEventArgs> SessionClosedHandler;
 
-    public async Task<bool> CreateTcpServer(SocketModel model)
+    public async Task<bool> CreateServer(SocketModel model, bool isTcpServer)
     {
         //创建宿主：用Package的类型和PipelineFilter的类型创建SuperSocket宿主。
-        var server = SuperSocketHostBuilder.Create<TextPackageInfo, MyPipelineFilter>()
+        var build = SuperSocketHostBuilder.Create<TextPackageInfo, MyPipelineFilter>()
             .UseHostedService<MyService>()
             .UseSession<MySession>()
             //注册用于处理连接、关闭的Session处理器
@@ -45,6 +45,7 @@ public class SocketServerManager : ISocketServerManager
             {
                 SessionConnectedHandler?.Invoke(this, new SessionConnectedEventArgs()
                 {
+                    IsTcpServer = isTcpServer,
                     ServerId = session.Server.Name,
                     SessionID = session.SessionID,
                     RemoteEndPoint = session.RemoteEndPoint,
@@ -55,6 +56,7 @@ public class SocketServerManager : ISocketServerManager
             {
                 SessionClosedHandler?.Invoke(this, new SessionClosedEventArgs()
                 {
+                    IsTcpServer = isTcpServer,
                     ServerId = session.Server.Name,
                     SessionID = session.SessionID,
                     RemoteEndPoint = session.RemoteEndPoint,
@@ -68,6 +70,7 @@ public class SocketServerManager : ISocketServerManager
             {
                 PackageHandler?.Invoke(this, new PackageHandlerEventArgs()
                 {
+                    IsTcpServer = isTcpServer,
                     ServerId = session.Server.Name,
                     SessionID = session.SessionID,
                     Message = package.Text
@@ -87,8 +90,10 @@ public class SocketServerManager : ISocketServerManager
                     }
                 }.ToList();
             })
-            .UseInProcSessionContainer()
-            .BuildAsServer();
+            .UseInProcSessionContainer();
+        if (!isTcpServer)
+            build.UseUdp();
+        var server = build.BuildAsServer();
 
         _tcpServer.TryAdd(model.Key, server);
         await server.StartAsync();
@@ -122,8 +127,8 @@ public class SocketServerManager : ISocketServerManager
 
         return false;
     }
-    
-    public async Task<bool> CloseSession(IPEndPoint remoteIpEndPoint,string sessionId)
+
+    public async Task<bool> CloseSession(IPEndPoint remoteIpEndPoint, string sessionId)
     {
         var matchData = _tcpServer.FirstOrDefault(x => x.Key.Contains(remoteIpEndPoint.ToString()));
         if (!string.IsNullOrEmpty(matchData.Key))
@@ -132,20 +137,20 @@ public class SocketServerManager : ISocketServerManager
             await service.CloseSessionAsync(sessionId);
             return true;
         }
-        
+
         return false;
     }
-    
-    public async Task<bool> SendMessage(IPEndPoint remoteIpEndPoint,string sessionId,string message)
+
+    public async Task<bool> SendMessage(IPEndPoint remoteIpEndPoint, string message, string sessionId)
     {
         var matchData = _tcpServer.FirstOrDefault(x => x.Key.Contains(remoteIpEndPoint.ToString()));
         if (!string.IsNullOrEmpty(matchData.Key))
         {
             var service = matchData.Value.ServiceProvider.GetService<MyService>();
-            await service.SendMessageAsync(sessionId, message);
+            await service.SendMessageAsync(message, sessionId);
             return true;
         }
-        
+
         return false;
     }
 

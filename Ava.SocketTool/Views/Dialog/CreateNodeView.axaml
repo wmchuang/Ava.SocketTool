@@ -19,10 +19,10 @@
     
     <UserControl.DataTemplates>
         <dataTemplate:NodeModelTemplateSelector>
-            <!-- Tcp Server Node -->
-            <DataTemplate x:Key="TcpServer" DataType="model:NodeModel">
+            <!-- Tcp/Udp Server Node -->
+            <DataTemplate x:Key="Server" DataType="model:NodeModel">
                 <StackPanel Orientation="Horizontal" Margin="20 0">
-                    <TextBlock Text="监听端口: " VerticalAlignment="Center" />
+                    <TextBlock Text="本地端口: " VerticalAlignment="Center" />
                     <TextBox Width="80" Text="{Binding Port}"></TextBox>
                 </StackPanel>
             </DataTemplate>

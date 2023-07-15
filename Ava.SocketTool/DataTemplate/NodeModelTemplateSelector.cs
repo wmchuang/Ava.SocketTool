@@ -19,6 +19,7 @@ public class NodeModelTemplateSelector : IDataTemplate
         if (param is NodeModel model)
         {
             var key = model.TypeEnum.ToString(); // Our Keys in the dictionary are strings, so we call .ToString() to get the key to look up
+            if (key.Contains("Server")) key = "Server";
             if (key is null) // If the key is null, we throw an ArgumentNullException
             {
                 throw new ArgumentNullException(nameof(param));
@@ -37,6 +38,7 @@ public class NodeModelTemplateSelector : IDataTemplate
         {
             // Our Keys in the dictionary are strings, so we call .ToString() to get the key to look up
             var key = model.TypeEnum.ToString();
+            if (key.Contains("Server")) key = "Server";
 
             return !string.IsNullOrEmpty(key)           // and the key must not be null or empty
                    && AvailableTemplates.ContainsKey(key); // and the key must be found in our Dictionary

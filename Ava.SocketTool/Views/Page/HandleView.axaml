@@ -28,8 +28,8 @@
 
     <UserControl.DataTemplates>
         <dataTemplate:SocketTreeModelTemplateSelector>
-            <!-- Tcp Server Node -->
-            <DataTemplate x:Key="TcpServer" DataType="model:SocketTreeModel">
+            <!-- Tcp/Udp Server Node -->
+            <DataTemplate x:Key="Server" DataType="model:SocketTreeModel">
                 <Grid RowDefinitions="*,*">
                     <TextBlock Margin="0 5"
                                Classes.Success="{Binding IsRun}"

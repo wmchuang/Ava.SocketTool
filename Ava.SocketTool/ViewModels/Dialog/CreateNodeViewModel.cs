@@ -49,9 +49,9 @@ public class CreateNodeViewModel : ViewModelBase
         var ipEndPoint = new IPEndPoint(NetworkExtension.GetIp(), NodeModel.Port);
         var socketModel = new SocketTreeModel(NodeModel.TypeEnum, ipEndPoint);
 
-        if (socketModel.TypeEnum == NetTypeEnum.TcpServer)
+        if (socketModel.TypeEnum == NetTypeEnum.TcpServer || socketModel.TypeEnum == NetTypeEnum.UdpServer)
         {
-            if (!await CreateTcpServer(socketModel)) return;
+            if (!await CreateServer(socketModel, socketModel.TypeEnum == NetTypeEnum.TcpServer)) return;
         }
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpClient)
@@ -63,13 +63,13 @@ public class CreateNodeViewModel : ViewModelBase
         await Dispatcher.UIThread.InvokeAsync(OverlayExtension.CloseDialog);
     });
 
-    private async Task<bool> CreateTcpServer(SocketTreeModel socketModel)
+    private async Task<bool> CreateServer(SocketTreeModel socketModel, bool isTcpServer)
     {
-        var result = await _serverManager.CreateTcpServer(new SocketModel
+        var result = await _serverManager.CreateServer(new SocketModel
         {
             Id = socketModel.Id,
             LocalEndPoint = socketModel.LocalEndPoint
-        });
+        }, isTcpServer);
         if (!result)
         {
             OverlayExtension.ShowDialog(new ErrorDialogView("创建失败，端口可能被占用！"));
