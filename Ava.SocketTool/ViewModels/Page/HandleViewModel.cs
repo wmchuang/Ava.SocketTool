@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using Ava.SocketTool.Extensions;
 using Ava.SocketTool.Models;
@@ -32,6 +33,17 @@ public class HandleViewModel : ViewModelBase
     public SocketTreeModel CurrentSelectModel { get; set; } = new SocketTreeModel();
 
     /// <summary>
+    /// 发送次数
+    /// </summary>
+    [Reactive]
+    public int SendNumber { get; set; } = 1;
+
+    public List<int> SendNumbers => new List<int>()
+    {
+        1, 10, 100, 1000, 10000
+    };
+
+    /// <summary>
     /// 开始监听
     /// </summary>
     public ReactiveCommand<Unit, Unit> StartListenCommand => CreateCommand<Unit>(async tree =>
@@ -63,6 +75,9 @@ public class HandleViewModel : ViewModelBase
         }
     });
 
+    /// <summary>
+    /// 连接
+    /// </summary>
     public ReactiveCommand<Unit, Unit> ConnectCommand => CreateCommand<Unit>(async tree =>
     {
         var ipEndPoint = await _clientManager.ConnectAsync(CurrentSelectModel.Key);
@@ -77,10 +92,13 @@ public class HandleViewModel : ViewModelBase
         }
     });
 
+    /// <summary>
+    /// 断开
+    /// </summary>
     public ReactiveCommand<Unit, Unit> CloseCommand => CreateCommand<Unit>(async tree =>
     {
         await _clientManager.CloseAsync(CurrentSelectModel.Key);
-        
+
         if (!string.IsNullOrWhiteSpace(CurrentSelectModel.SessionId))
         {
             await _serverManager.CloseSession(CurrentSelectModel.LocalEndPoint, CurrentSelectModel.SessionId);
@@ -92,17 +110,22 @@ public class HandleViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> SendCommand => CreateCommand<Unit>(async tree =>
     {
-        if (!string.IsNullOrWhiteSpace(CurrentSelectModel.SessionId))
+        for (var i = 0; i < SendNumber; i++)
         {
-            await _serverManager.SendMessage(CurrentSelectModel.LocalEndPoint, CurrentSelectModel.SessionId, CurrentSelectModel.SendMessage);
-        }
-        else
-        {
-            await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
+            if (!string.IsNullOrWhiteSpace(CurrentSelectModel.SessionId))
+            {
+                await _serverManager.SendMessage(CurrentSelectModel.LocalEndPoint, CurrentSelectModel.SessionId,
+                    CurrentSelectModel.SendMessage);
+            }
+            else
+            {
+                await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
+            }
+
+            var str = $"{DateTime.Now:HH:mm:dd}发送数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";
+            CurrentSelectModel.ReceiveMessage += str;
         }
 
-        var str = $"{DateTime.Now:HH:mm:dd}发送数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";
-        CurrentSelectModel.ReceiveMessage += str;
         CurrentSelectModel.SendMessage = string.Empty;
     });
 }

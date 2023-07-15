@@ -123,12 +123,13 @@
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
                 <Button Content="发送数据" Margin="0 30 0 0" Command="{Binding SendCommand}" />
                 <TextBlock Text="重复发送次数" Margin="0 20 0 0" />
-                <ComboBox Width="150" Classes="Bordered">
-                    <ComboBoxItem>1</ComboBoxItem>
-                    <ComboBoxItem>10</ComboBoxItem>
-                    <ComboBoxItem>100</ComboBoxItem>
-                    <ComboBoxItem>1000</ComboBoxItem>
-                    <ComboBoxItem>10000</ComboBoxItem>
+                <ComboBox Width="150" SelectedIndex="0" 
+                          SelectedItem="{Binding SendNumber}" ItemsSource="{Binding SendNumbers}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
 
             </StackPanel>
