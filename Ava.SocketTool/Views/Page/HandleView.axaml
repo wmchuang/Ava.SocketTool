@@ -95,8 +95,30 @@
                     </Grid>
 
                 </Grid>
+            </DataTemplate>
+            
+             <!-- Udp Client Node -->
+            <DataTemplate x:Key="UdpClient" DataType="model:SocketTreeModel">
+                <Grid ColumnDefinitions="*,*,*">
 
+                    <TextBlock Grid.Column="1">
+                        <Run Text="对方IP:"></Run>
+                        <Run Text="{Binding RemoteEndPoint.Address,Converter={x:Static cv:IpAddressToIpConverter.Instance}}"></Run>
+                    </TextBlock>
 
+                    <Grid Grid.Column="2" RowDefinitions="*,*">
+                        <TextBlock>
+                            <Run Text="对方端口：" />
+                            <Run Text="{Binding RemoteEndPoint.Port}" />
+                        </TextBlock>
+
+                        <TextBlock Grid.Row="1">
+                            <Run Text="本地端口：" />
+                            <Run Text="{Binding LocalEndPoint.Port}" />
+                        </TextBlock>
+                    </Grid>
+
+                </Grid>
             </DataTemplate>
         </dataTemplate:SocketTreeModelTemplateSelector>
     </UserControl.DataTemplates>

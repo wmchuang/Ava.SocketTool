@@ -115,20 +115,19 @@ public class MainViewModel : ViewModelBase
         {
             if (args.IsTcpServer)
             {
-                var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
-                var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
+                var serverRoot = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
+                var server = serverRoot?.Children.FirstOrDefault(x => x.Id == args.ServerId);
 
-                var client = server.Children.FirstOrDefault(x => x.Id == args.SessionID);
-                var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
-                client.ReceiveMessage += str;
+                var node = server?.Children.FirstOrDefault(x => x.Id == args.SessionID);
+                var str = $"{DateTime.Now:HH:mm:dd}收到数据：{args.Message}{Environment.NewLine}";
+                if (node != null) node.ReceiveMessage += str;
             }
             else
             {
-                var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.UdpServer);
-                var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
-
-                var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
-                server.ReceiveMessage += str;
+                var serverRoot = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.UdpServer);
+                var node = serverRoot?.Children.FirstOrDefault(x => x.Id == args.ServerId);
+                var str = $"{DateTime.Now:HH:mm:dd}收到[{args.SessionID}]数据：{args.Message}{Environment.NewLine}";
+                if (node != null) node.ReceiveMessage += str;
             }
         };
 
@@ -137,9 +136,9 @@ public class MainViewModel : ViewModelBase
             if (args.IsTcpServer)
             {
                 var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
-                var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
+                var server = tcpServer?.Children.FirstOrDefault(x => x.Id == args.ServerId);
 
-                server.Children.Add(new SocketTreeModel(NetTypeEnum.TcpClient, (IPEndPoint)args.RemoteEndPoint)
+                server?.Children.Add(new SocketTreeModel(NetTypeEnum.TcpClient, (IPEndPoint)args.RemoteEndPoint)
                 {
                     Id = args.SessionID,
                     SessionId = args.SessionID,
@@ -155,29 +154,40 @@ public class MainViewModel : ViewModelBase
             {
                 //删除Server下的Client节点
                 var tcpServer = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpServer);
-                var server = tcpServer.Children.FirstOrDefault(x => x.Id == args.ServerId);
+                var server = tcpServer?.Children.FirstOrDefault(x => x.Id == args.ServerId);
 
-                var closeSession = server.Children.FirstOrDefault(x => x.Id == args.SessionID);
-                server.Children.Remove(closeSession);
+                var closeSession = server?.Children.FirstOrDefault(x => x.Id == args.SessionID);
+                server?.Children.Remove(closeSession);
 
                 //找到Client下的节点，改变其状态
                 var tcpClient = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpClient);
-                var client = tcpClient.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, args.RemoteEndPoint));
-                if (client != null)
+                if (tcpClient != null)
                 {
-                    client.IsRun = false;
-                    client.LocalEndPoint = null;
+                    var client = tcpClient.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, args.RemoteEndPoint));
+                    if (client != null)
+                    {
+                        client.IsRun = false;
+                        client.LocalEndPoint = null;
+                    }
                 }
             }
         };
 
         _clientManager.PackageHandler += (sender, args) =>
         {
-            var tcpClient = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpClient);
-            var client = tcpClient.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, sender));
+            SocketTreeModel clientRoot;
+            if (args.IsTcpServer)
+            {
+                clientRoot = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpClient);
+            }
+            else
+            {
+                clientRoot = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.UdpClient);
+            }
 
+            var client = clientRoot?.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, sender));
             var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
-            client.ReceiveMessage += str;
+            if (client != null) client.ReceiveMessage += str;
         };
     }
 }

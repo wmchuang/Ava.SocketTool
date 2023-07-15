@@ -15,7 +15,14 @@ public interface ISocketClientManager
     /// 创建Tcp Client
     /// </summary>
     /// <param name="model"></param>
-    void CreateTcpClient(SocketModel model);
+    void CreateClient(SocketModel model);
+
+    /// <summary>
+    /// Udp
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    Task<IPEndPoint?> AsUdpAsync(string key);
 
     /// <summary>
     /// 发送消息

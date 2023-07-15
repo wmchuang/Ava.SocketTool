@@ -112,12 +112,15 @@ public class HandleViewModel : ViewModelBase
     {
         for (var i = 0; i < SendNumber; i++)
         {
-            if (CurrentSelectModel.TypeEnum == NetTypeEnum.UdpServer)
+            if (CurrentSelectModel.TypeEnum == NetTypeEnum.TcpServer)
+            {
+            }
+            else if (CurrentSelectModel.TypeEnum == NetTypeEnum.UdpServer)
             {
                 await _serverManager.SendMessage(CurrentSelectModel.LocalEndPoint,
                     CurrentSelectModel.SendMessage);
             }
-            else
+            else  if (CurrentSelectModel.TypeEnum == NetTypeEnum.TcpClient)
             {
                 if (!string.IsNullOrWhiteSpace(CurrentSelectModel.SessionId))
                 {
@@ -128,6 +131,11 @@ public class HandleViewModel : ViewModelBase
                 {
                     await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
                 }
+            }
+            else if (CurrentSelectModel.TypeEnum == NetTypeEnum.UdpClient)
+            {
+                await _clientManager.AsUdpAsync(CurrentSelectModel.Key);
+                await _clientManager.SendMessage(CurrentSelectModel.Key, CurrentSelectModel.SendMessage);
             }
 
             var str = $"{DateTime.Now:HH:mm:dd}发送数据： {CurrentSelectModel.SendMessage}{Environment.NewLine}";

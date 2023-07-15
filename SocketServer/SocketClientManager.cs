@@ -21,7 +21,7 @@ public class SocketClientManager : ISocketClientManager
     /// </summary>
     public event EventHandler<PackageHandlerEventArgs> PackageHandler;
 
-    public void CreateTcpClient(SocketModel model)
+    public void CreateClient(SocketModel model)
     {
         var filter = new MyPipelineFilter();
         var myClient = new MyClient<TextPackageInfo>(filter)
@@ -41,13 +41,40 @@ public class SocketClientManager : ISocketClientManager
             await client.SendAsync(bytes);
         }
     }
+    
+    public async Task<IPEndPoint?> AsUdpAsync(string key)
+    {
+        if (_tcpClients.TryGetValue(key, out var myClient))
+        {
+            myClient.AsUdp(myClient.RemoteEndPoint);
+            var client = myClient.AsClient();
+       
+            var channel = myClient.GetChannel();
+            if (channel == null) return null;
+            
+            client.PackageHandler += (sender, package) =>
+            {
+                PackageHandler?.Invoke(channel.LocalEndPoint,new PackageHandlerEventArgs
+                {
+                    Message = package.Text
+                });
+                return default;
+            };
+            client.StartReceive();
+            if (channel.LocalEndPoint is IPEndPoint point)
+            {
+                return point;
+            }
+        }
+
+        return null;
+    }
 
     public async Task<IPEndPoint?> ConnectAsync(string key)
     {
         if (_tcpClients.TryGetValue(key, out var myClient))
         {
             var client = myClient.AsClient();
-          
             await client.ConnectAsync(myClient.RemoteEndPoint);
        
             var channel = myClient.GetChannel();
@@ -57,6 +84,7 @@ public class SocketClientManager : ISocketClientManager
             {
                 PackageHandler?.Invoke(channel.LocalEndPoint,new PackageHandlerEventArgs
                 {
+                    IsTcpServer = true,
                     Message = package.Text
                 });
                 return default;

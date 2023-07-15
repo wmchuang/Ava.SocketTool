@@ -40,6 +40,21 @@
                     </StackPanel>
                 </StackPanel>
             </DataTemplate>
+            
+            
+            <!-- Udp Client Node -->
+            <DataTemplate x:Key="UdpClient" DataType="model:NodeModel">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="20">
+                    <StackPanel Orientation="Horizontal" Margin="20 0">
+                        <TextBlock Text="    对方IP: " VerticalAlignment="Center" />
+                        <TextBox Width="150" Text="{Binding Ip,Converter={x:Static cv:IpAddressToIpConverter.Instance}}" x:Name="IP"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="20 0">
+                        <TextBlock Text="对方端口: " VerticalAlignment="Center" />
+                        <TextBox Width="80" Text="{Binding Port}" x:Name="Port"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
         </dataTemplate:NodeModelTemplateSelector>
     </UserControl.DataTemplates>
 

@@ -54,9 +54,9 @@ public class CreateNodeViewModel : ViewModelBase
             if (!await CreateServer(socketModel, socketModel.TypeEnum == NetTypeEnum.TcpServer)) return;
         }
 
-        if (socketModel.TypeEnum == NetTypeEnum.TcpClient)
+        if (socketModel.TypeEnum == NetTypeEnum.TcpClient || socketModel.TypeEnum == NetTypeEnum.UdpClient)
         {
-            await CreateTcpClient(socketModel);
+            await CreateClient(socketModel);
         }
 
         Owner.Add(NodeModel.TypeEnum, socketModel);
@@ -80,19 +80,13 @@ public class CreateNodeViewModel : ViewModelBase
         return true;
     }
 
-    private async Task CreateTcpClient(SocketTreeModel socketModel)
+    private async Task CreateClient(SocketTreeModel socketModel)
     {
         var model = new SocketModel
         {
             Id = socketModel.Id,
             LocalEndPoint = socketModel.RemoteEndPoint
         };
-        _clientManager.CreateTcpClient(model);
-        // var point = await _clientManager.ConnectAsync(model.Key);
-        // if (point != null)
-        // {
-        //     socketModel.LocalEndPoint = point;
-        //     socketModel.IsRun = true;
-        // }
+        _clientManager.CreateClient(model);
     }
 }
