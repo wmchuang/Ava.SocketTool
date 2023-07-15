@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
+using SocketServer.Encoder;
 using SocketServer.EventArg;
 using SocketServer.Model;
 using SocketServer.Socket;
@@ -35,7 +36,7 @@ public class SocketClientManager : ISocketClientManager
     {
         if (_tcpClients.TryGetValue(key, out var myClient))
         {
-            var bytes = Encoding.GetEncoding("GBK").GetBytes(message);
+            var bytes = DefaultEncoder.Encoding.GetBytes(message);
             var client = myClient.AsClient();
             await client.SendAsync(bytes);
         }

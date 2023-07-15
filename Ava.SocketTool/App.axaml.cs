@@ -7,6 +7,7 @@ using Ava.SocketTool.ViewModels;
 using Ava.SocketTool.Views;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
+using SocketServer.Encoder;
 
 namespace Ava.SocketTool;
 

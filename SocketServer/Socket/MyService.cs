@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Options;
+using SocketServer.Encoder;
 using SuperSocket;
 using SuperSocket.Channel;
 using SuperSocket.ProtoBase;
@@ -55,7 +56,7 @@ public class MyService : SuperSocketService<TextPackageInfo>
         var session = sessionContainer.FirstOrDefault(x => x.SessionID == sessionId);
         if (session != null)
         {
-            await session.SendAsync(Encoding.UTF8.GetBytes(message));
+            await session.SendAsync(DefaultEncoder.Encoding.GetBytes(message));
         }
     }
 }

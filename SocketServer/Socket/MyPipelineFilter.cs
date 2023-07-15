@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Text;
+using SocketServer.Encoder;
 using SuperSocket.ProtoBase;
 
 namespace SocketServer.Socket;
@@ -28,7 +29,7 @@ public class MyPipelineFilter : PipelineFilterBase<TextPackageInfo>
         return new TextPackageInfo()
         {
             // Text = buffer.GetString(Encoding.UTF8)
-             Text = buffer.GetString(Encoding.GetEncoding("GBK"))
+             Text = buffer.GetString(DefaultEncoder.Encoding)
         };
     }
 }
