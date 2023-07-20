@@ -1,16 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+<!--        <OutputType Condition="'$(Configuration.toUpper())' != 'DEBUG'">WinExe</OutputType>-->
+<!--        <OutputType Condition="'$(Configuration.toUpper())' == 'DEBUG'">Exe</OutputType>-->
+        <OutputType>WinExe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <Nullable>disable</Nullable>
         <ApplicationIcon>Assets\avalonia-logo.ico</ApplicationIcon>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+<!--        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>-->
         <!--添加aot-->
-        <PublishAot>true</PublishAot>
-        <PublishTrimmed>true</PublishTrimmed>
-        <SelfContained>true</SelfContained>
+        <!-- <PublishAot>true</PublishAot> -->
+        <!-- <PublishTrimmed>true</PublishTrimmed> -->
+<!--        <SelfContained>true</SelfContained>-->
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,8 +24,9 @@
 
     <ItemGroup>
         <ProjectCapability Include="Avalonia" />
-        <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
+        <TrimmerRootAssembly Include="Semi.Avalonia" />
     </ItemGroup>
+    
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.0" />

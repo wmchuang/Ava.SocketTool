@@ -6,6 +6,8 @@ Ava.SocketTool 是一个模仿 SocketTool软件 的Socket调试工具
 
 ![Demo](./assets/demo.png)
 
+![Demo1](./assets/demo1.png)
+
 ## 感谢
 
 [SocketTool](https://gitee.com/chengjianxi/SocketTool)
