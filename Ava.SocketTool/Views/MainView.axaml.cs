@@ -1,7 +1,9 @@
+using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
+using SocketServer.Encoder;
 
 namespace Ava.SocketTool.Views;
 
@@ -22,11 +24,20 @@ public partial class MainView : Window
         }
     }
 
-    private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+
+    private void SelectingItemsControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (sender is TextBox tb)
+        if (sender is ComboBox comboBox)
         {
-            tb.CaretIndex = tb.Text?.Length ?? 0;
+            var index = comboBox.SelectedIndex;
+            if (index == 1)
+            {
+                DefaultEncoder.Encoding = Encoding.UTF8;
+            }
+            else
+            {
+                DefaultEncoder.Encoding = Encoding.GetEncoding("GBK");
+            }
         }
     }
 }
