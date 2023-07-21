@@ -2,6 +2,7 @@ using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Rendering;
 using Avalonia.Styling;
 using SocketServer.Encoder;
 
@@ -12,6 +13,7 @@ public partial class MainView : Window
     public MainView()
     {
         InitializeComponent();
+        // RendererDiagnostics.DebugOverlays = RendererDebugOverlays.Fps;
     }
     
     private void ToggleButton_OnIsCheckedChanged(object sender, RoutedEventArgs e)

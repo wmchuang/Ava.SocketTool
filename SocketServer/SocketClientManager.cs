@@ -21,6 +21,8 @@ public class SocketClientManager : ISocketClientManager
     /// </summary>
     public event EventHandler<PackageHandlerEventArgs> PackageHandler;
 
+    public event EventHandler<ClientClosedEventArgs>? ClosedHandler;
+
     public void CreateClient(SocketModel model)
     {
         var filter = new MyPipelineFilter();
@@ -88,6 +90,14 @@ public class SocketClientManager : ISocketClientManager
                     Message = package.Text
                 });
                 return default;
+            };
+
+            client.Closed += (sender, args) =>
+            {
+               ClosedHandler.Invoke(this,new ClientClosedEventArgs()
+               {
+                   LocalEndPoint = ((MyClient<TextPackageInfo>)sender).GetChannel().LocalEndPoint
+               });
             };
             client.StartReceive();
             if (channel.LocalEndPoint is IPEndPoint point)

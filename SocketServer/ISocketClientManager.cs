@@ -10,6 +10,11 @@ public interface ISocketClientManager
     /// 接收到数据包处理
     /// </summary>
     event EventHandler<PackageHandlerEventArgs> PackageHandler;
+    
+    /// <summary>
+    /// 客户端断开时处理
+    /// </summary>
+    event EventHandler<ClientClosedEventArgs> ClosedHandler;
 
     /// <summary>
     /// 创建Tcp Client

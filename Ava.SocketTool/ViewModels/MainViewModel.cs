@@ -189,5 +189,20 @@ public class MainViewModel : ViewModelBase
             var str = $"{DateTime.Now:HH:mm:dd}收到数据： {args.Message}{Environment.NewLine}";
             if (client != null) client.ReceiveMessage += str;
         };
+
+        _clientManager.ClosedHandler += (sender, args) =>
+        {
+            //找到Client下的节点，改变其状态
+            var tcpClient = TreeDataList.FirstOrDefault(x => x.TypeEnum == NetTypeEnum.TcpClient);
+            if (tcpClient != null)
+            {
+                var client = tcpClient.Children.FirstOrDefault(x => Equals(x.LocalEndPoint, args.LocalEndPoint));
+                if (client != null)
+                {
+                    client.IsRun = false;
+                    client.LocalEndPoint = null;
+                }
+            }
+        };
     }
 }

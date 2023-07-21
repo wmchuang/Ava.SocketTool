@@ -57,6 +57,10 @@ public class CreateNodeViewModel : ViewModelBase
         if (socketModel.TypeEnum == NetTypeEnum.TcpClient || socketModel.TypeEnum == NetTypeEnum.UdpClient)
         {
             await CreateClient(socketModel);
+            if (socketModel.TypeEnum == NetTypeEnum.UdpClient)
+            {
+                socketModel.IsRun = true;
+            }
         }
 
         Owner.Add(NodeModel.TypeEnum, socketModel);

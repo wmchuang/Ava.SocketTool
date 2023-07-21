@@ -143,7 +143,7 @@
             </HeaderedContentControl>
 
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
-                <Button Content="发送数据" Margin="0 30 0 0" Command="{Binding SendCommand}" />
+                <Button Content="发送数据" Margin="0 30 0 0" Command="{Binding SendCommand}" IsEnabled="{Binding CurrentSelectModel.IsRun}" />
                 <TextBlock Text="重复发送次数" Margin="0 20 0 0" />
                 <ComboBox Width="150" SelectedIndex="0" 
                           SelectedItem="{Binding SendNumber}" ItemsSource="{Binding SendNumbers}">
