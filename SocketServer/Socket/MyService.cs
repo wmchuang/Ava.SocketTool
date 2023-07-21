@@ -51,10 +51,9 @@ public class MyService : SuperSocketService<TextPackageInfo>
     /// <param name="message"></param>
     public async Task SendMessageAsync(string message, string sessionId = "")
     {
-        var sessionContainer = this.GetSessionContainer().GetSessions();
-
         if (string.IsNullOrWhiteSpace(sessionId))
         {
+            var sessionContainer = this.GetSessionContainer().GetSessions();
             foreach (var session in sessionContainer)
             {
                 await session.SendAsync(DefaultEncoder.Encoding.GetBytes(message));
@@ -62,7 +61,7 @@ public class MyService : SuperSocketService<TextPackageInfo>
         }
         else
         {
-            var session = sessionContainer.FirstOrDefault(x => x.SessionID == sessionId);
+            var session = this.GetSessionContainer().GetSessionByID(sessionId);
             if (session != null)
             {
                 await session.SendAsync(DefaultEncoder.Encoding.GetBytes(message));
