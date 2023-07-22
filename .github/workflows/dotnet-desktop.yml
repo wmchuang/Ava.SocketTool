@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore ./Ava.SocketTool.sln
       
     - name: Build
-      run: dotnet build -c Release ./Ava.SocketTool.slnn --no-restore
+      run: dotnet build -c Release ./Ava.SocketTool.sln --no-restore
       
     - name: Test
       run: dotnet test -c Release ./Ava.SocketTool.sln --no-build --verbosity normal
