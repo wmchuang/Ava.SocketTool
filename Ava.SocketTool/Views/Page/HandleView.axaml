@@ -6,9 +6,11 @@
              xmlns:dataTemplate="clr-namespace:Ava.SocketTool.DataTemplate"
              xmlns:model="clr-namespace:Ava.SocketTool.Models"
              xmlns:cv="clr-namespace:Ava.SocketTool.Convert"
+             xmlns:page="clr-namespace:Ava.SocketTool.ViewModels.Page"
              d:DataContext="{x:Static dd:DesignData.ExampleHandleViewModel}"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Control"
+             x:DataType="page:HandleViewModel"
              x:Class="Ava.SocketTool.Views.Page.HandleView">
     <UserControl.Styles>
         <Style Selector="TextBlock.Start">
@@ -40,10 +42,10 @@
                     <Grid Grid.Row="1" ColumnDefinitions="*,*">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <Button Content="启动监听" Classes="Primary" FontSize="10"
-                                    Command="{Binding #Control.DataContext.StartListenCommand}"
+                                    Command="{Binding #Control.((page:HandleViewModel)DataContext).StartListenCommand}"
                                     IsEnabled="{Binding !IsRun}" />
                             <Button Content="停止监听" Classes="Danger" FontSize="10"
-                                    Command="{Binding #Control.DataContext.StopListenCommand}"
+                                    Command="{Binding #Control.((page:HandleViewModel)DataContext).StopListenCommand}"
                                     IsEnabled="{Binding IsRun}" />
                         </StackPanel>
 
@@ -68,11 +70,11 @@
 
                         <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="1">
                             <Button Content="连接" Classes="Primary" FontSize="10"
-                                    Command="{Binding #Control.DataContext.ConnectCommand}"
+                                    Command="{Binding #Control.((page:HandleViewModel)DataContext).ConnectCommand}"
                                     IsEnabled="{Binding !IsRun}"
                                     IsVisible="{Binding SessionId,Converter={x:Static StringConverters.IsNullOrEmpty}}"/>
                             <Button Content="断开" Classes="Danger" FontSize="10"
-                                    Command="{Binding #Control.DataContext.CloseCommand}"
+                                    Command="{Binding #Control.((page:HandleViewModel)DataContext).CloseCommand}"
                                     IsEnabled="{Binding IsRun}" />
                         </StackPanel>
                     </Grid>

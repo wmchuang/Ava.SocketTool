@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Ava.SocketTool.ViewModels;
+using Ava.SocketTool.ViewModels.Dialog;
+using Ava.SocketTool.Views.Dialog;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
@@ -12,6 +14,14 @@ sealed class ViewLocator : IDataTemplate
 
     public Control Build(object viewModel)
     {
+        Control view;
+        if (viewModel is CreateNodeViewModel)
+        {
+            view = new CreateNodeView();
+            view.DataContext = viewModel;
+            return view;
+        }
+        
         var viewModelTypeName = viewModel.GetType().FullName!;
 
         if (!_viewTypeCache.TryGetValue(viewModelTypeName, out var viewType))

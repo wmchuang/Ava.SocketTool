@@ -39,7 +39,8 @@ public class MainViewModel : ViewModelBase
     /// 当前选择的对象
     /// </summary>
     [Reactive]
-    public SocketTreeModel CurrentSelectModel { get; set; } = new SocketTreeModel();
+    public SocketTreeModel CurrentSelectModel { get; set; } = new();
+    
 
     public void InitData()
     {

@@ -11,7 +11,7 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
         <AssemblyVersion>1.0.0</AssemblyVersion>
-<!--        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>-->
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <!--添加aot-->
         <!-- <PublishAot>true</PublishAot> -->
         <!-- <PublishTrimmed>true</PublishTrimmed> -->

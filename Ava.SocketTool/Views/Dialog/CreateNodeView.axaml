@@ -12,6 +12,7 @@
              BorderThickness="1"
              BorderBrush="Cornsilk"
              Background="{DynamicResource BorderCardBackground}"
+             x:DataType="vm:CreateNodeViewModel"
              x:Class="Ava.SocketTool.Views.Dialog.CreateNodeView">
     <Design.DataContext>
         <vm:CreateNodeViewModel/>

@@ -12,6 +12,7 @@
         Width="700" Height="500"
         MinWidth="700" MinHeight="500"
         x:Class="Ava.SocketTool.Views.MainView"
+        x:DataType="dd:MainViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Ava.SocketTool 调试工具V1.0">
 
@@ -84,9 +85,8 @@
 
                 <Grid Grid.Column="2">
                     <Grid>
-                        <page:HandleView 
-                            IsVisible="{Binding CurrentSelectModel.Key,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
-                        
+                        <page:HandleView
+                            IsVisible="{ReflectionBinding CurrentSelectModel.Key,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                         <Border Theme="{StaticResource CardBorder}" VerticalAlignment="Top"
                                 IsVisible="{Binding CurrentSelectModel.Key,Converter={x:Static StringConverters.IsNullOrEmpty}}">
                             <StackPanel Orientation="Vertical" Spacing="30">
