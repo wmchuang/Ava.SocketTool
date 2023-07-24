@@ -15,7 +15,7 @@ public class NodeModel : ModelBase
     /// Ip
     /// </summary>
     [Reactive]
-    public IPAddress Ip { get; set; } = NetworkExtension.GetIp();
+    public string Ip { get; set; } = NetworkExtension.GetIp().ToString();
 
     /// <summary>
     /// Port

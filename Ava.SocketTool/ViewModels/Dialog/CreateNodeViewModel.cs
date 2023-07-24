@@ -46,7 +46,7 @@ public class CreateNodeViewModel : ViewModelBase
     /// </summary>
     public ReactiveCommand<Unit, Unit> CreateCommand => CreateCommand<Unit>(async _ =>
     {
-        var ipEndPoint = new IPEndPoint(NetworkExtension.GetIp(), NodeModel.Port);
+        var ipEndPoint = new IPEndPoint(IPAddress.Parse(NodeModel.Ip), NodeModel.Port);
         var socketModel = new SocketTreeModel(NodeModel.TypeEnum, ipEndPoint);
 
         if (socketModel.TypeEnum == NetTypeEnum.TcpServer || socketModel.TypeEnum == NetTypeEnum.UdpServer)
