@@ -103,6 +103,8 @@ public class MainViewModel : ViewModelBase
                 await _serverManager.RemoveServer(model.Key);
                 item.Children.Remove(model);
                 CurrentSelectModel = new();
+                var handleViewMode = Bootstrapper.GetService<HandleViewModel>();
+                handleViewMode.CurrentSelectModel = CurrentSelectModel;
                 break;
             }
         }
