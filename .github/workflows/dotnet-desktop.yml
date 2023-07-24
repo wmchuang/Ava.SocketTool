@@ -1,0 +1,31 @@
+
+name: .NET Core Desktop
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+   runs-on: windows-latest
+
+   steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 7.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore ./Ava.SocketTool.sln
+      
+    - name: Build
+      run: dotnet build -c Release ./Ava.SocketTool.sln --no-restore
+      
+    - name: Test
+      run: dotnet test -c Release ./Ava.SocketTool.sln --no-build --verbosity normal
+  
+    - name: Pack
+      run: dotnet pack -c Release -o ./publish ./Ava.SocketTool.sln /p:ContinuousIntegrationBuild=true
