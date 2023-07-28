@@ -80,7 +80,7 @@ public class SocketClientManager : ISocketClientManager
             await client.ConnectAsync(myClient.RemoteEndPoint);
        
             var channel = myClient.GetChannel();
-            if (channel == null) return null;
+            if (channel == null || channel.IsClosed) return null;
             
             client.PackageHandler += (sender, package) =>
             {
