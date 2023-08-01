@@ -1,0 +1,6 @@
+﻿<linker>
+    <!-- Can be removed if CompiledBinding and no reflection are used -->
+    <assembly fullname="Ava.SocketTool" preserve="All" />
+    <assembly fullname="SocketServer" preserve="All" />
+    <assembly fullname="Semi.Avalonia" preserve="All" />
+</linker>

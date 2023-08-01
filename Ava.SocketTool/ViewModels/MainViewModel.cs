@@ -6,6 +6,7 @@ using System.Reactive;
 using Ava.SocketTool.Models;
 using ReactiveUI.Fody.Helpers;
 using Ava.SocketTool.Extensions;
+using Ava.SocketTool.Services.Updates;
 using Ava.SocketTool.ViewModels.Dialog;
 using Ava.SocketTool.ViewModels.Page;
 using Ava.SocketTool.Views.Dialog;
@@ -21,15 +22,20 @@ public class MainViewModel : ViewModelBase
 {
     private readonly ISocketServerManager _serverManager;
     private readonly ISocketClientManager _clientManager;
+    private readonly AppUpdateService _updateService;
 
     public MainViewModel()
     {
     }
 
-    public MainViewModel(ISocketServerManager serverManager, ISocketClientManager clientManager)
+    public MainViewModel(ISocketServerManager serverManager, ISocketClientManager clientManager,
+        AppUpdateService updateService)
     {
         _serverManager = serverManager;
         _clientManager = clientManager;
+        _updateService = updateService;
+
+        CurrentVersion = _updateService.CurrentVersion.ToString();
         HandEvent();
     }
 
@@ -40,7 +46,18 @@ public class MainViewModel : ViewModelBase
     /// </summary>
     [Reactive]
     public SocketTreeModel CurrentSelectModel { get; set; } = new();
-    
+
+    /// <summary>
+    /// 当前版本
+    /// </summary>
+    [Reactive]
+    public string CurrentVersion { get; set; }
+
+    /// <summary>
+    /// 最新版本
+    /// </summary>
+    [Reactive]
+    public string LatestVersion { get; set; }
 
     public void InitData()
     {

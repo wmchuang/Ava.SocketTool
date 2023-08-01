@@ -4,6 +4,8 @@
              x:Class="Ava.SocketTool.App">
 
     <Application.Styles>
+        <FluentTheme />
+        
         <StyleInclude Source="avares://Semi.Avalonia/Themes/Index.axaml" />
         
         <StyleInclude Source="/Controls/Overlay.axaml" />

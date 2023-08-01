@@ -1,4 +1,5 @@
-﻿using Ava.SocketTool.ViewModels;
+﻿using Ava.SocketTool.Services.Updates;
+using Ava.SocketTool.ViewModels;
 using Ava.SocketTool.ViewModels.Dialog;
 using Ava.SocketTool.ViewModels.Page;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,11 @@ public static class Bootstrapper
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<HandleViewModel>();
         services.AddSingleton<CreateNodeViewModel>();
+
+        services.AddSingleton<AppUpdateService>();
         _serviceProvider = services.BuildServiceProvider();
+        
+        
     }
 
     public static TService GetService<TService>()
