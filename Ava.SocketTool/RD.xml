@@ -1,4 +1,5 @@
-﻿<Directives>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Directives>
     <Application>
         <Assembly Name="Avalonia.Win32">
             <!--In order to retrieve HiddenBorderSize-->
