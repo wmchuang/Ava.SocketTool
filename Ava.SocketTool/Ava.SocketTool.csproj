@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType Condition="'$(Configuration.toUpper())' != 'DEBUG'">WinExe</OutputType>
-        <OutputType Condition="'$(Configuration.toUpper())' == 'DEBUG'">Exe</OutputType>
+<!--        <OutputType Condition="'$(Configuration.toUpper())' != 'DEBUG'">WinExe</OutputType>-->
+<!--        <OutputType Condition="'$(Configuration.toUpper())' == 'DEBUG'">Exe</OutputType>-->
+        <OutputType>WinExe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <Nullable>disable</Nullable>
@@ -9,22 +10,33 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
-        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <Version>1.0.0</Version>
+        <FileVersion>1.0.0</FileVersion>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
          <!--添加aot-->
-<!--         <PublishAot>true</PublishAot> -->
-<!--         <PublishTrimmed>true</PublishTrimmed> -->
-<!--         <SelfContained>true</SelfContained>-->
-<!--         <StripSymbols>true</StripSymbols>-->
+         <PublishAot>true</PublishAot> 
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
-    </ItemGroup>
-    <ItemGroup>
-        <TrimmerRootDescriptor Include="Roots.xml" />
+        <RdXmlFile Include="RD.xml" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DebugType>full</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>full</DebugType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+  
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.0" />
         <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
@@ -34,6 +46,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
         <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-preview.6.23329.7" />
+        <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.2.3" />
         <PackageReference Include="ReactiveUI.Fody" Version="19.4.1" />
         <PackageReference Include="Semi.Avalonia" Version="11.0.0" />
     </ItemGroup>
