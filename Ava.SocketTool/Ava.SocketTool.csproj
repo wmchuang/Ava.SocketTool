@@ -21,6 +21,10 @@
         <RdXmlFile Include="RD.xml" />
     </ItemGroup>
 
+     <ItemGroup>
+         <TrimmerRootDescriptor Include="Roots.xml" />
+     </ItemGroup>
+    
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
@@ -47,6 +51,8 @@
         <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-preview.6.23329.7" />
         <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.2.3" />
+        <PackageReference Include="NLog" Version="5.2.2" />
+        <PackageReference Include="NLog.Config" Version="4.7.15" />
         <PackageReference Include="ReactiveUI.Fody" Version="19.4.1" />
         <PackageReference Include="Semi.Avalonia" Version="11.0.0" />
     </ItemGroup>

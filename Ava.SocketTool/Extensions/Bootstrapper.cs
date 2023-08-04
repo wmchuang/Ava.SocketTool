@@ -3,6 +3,7 @@ using Ava.SocketTool.ViewModels;
 using Ava.SocketTool.ViewModels.Dialog;
 using Ava.SocketTool.ViewModels.Page;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using SocketServer;
 
 namespace Ava.SocketTool.Extensions;
@@ -13,6 +14,9 @@ public static class Bootstrapper
 
     public static void ConfigureServices(IServiceCollection services)
     {
+
+        services.AddSingleton<ILogger>(LogManager.GetCurrentClassLogger());
+        
         services.AddSingleton<ISocketServerManager, SocketServerManager>();
         services.AddSingleton<ISocketClientManager, SocketClientManager>();
 

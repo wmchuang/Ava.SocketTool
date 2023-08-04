@@ -1,12 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Directives>
     <Application>
-        <Assembly Name="Avalonia.Win32">
-            <!--In order to retrieve HiddenBorderSize-->
-            <Type Name="Avalonia.Win32.WindowImpl" Dynamic="Required All"/>
-        </Assembly>
         <Assembly Name="Ava.SocketTool" Dynamic="Required All"/>
-        <Assembly Name="SocketServer" Dynamic="Required All"/>
         <Assembly Name="Avalonia.Themes.Fluent" Dynamic="Required All"/>
         <Assembly Name="Semi.Avalonia" Dynamic="Required All"/>
     </Application>

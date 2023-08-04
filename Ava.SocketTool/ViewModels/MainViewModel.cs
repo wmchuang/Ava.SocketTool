@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Reactive;
@@ -59,6 +60,7 @@ public class MainViewModel : ViewModelBase
     [Reactive]
     public string LatestVersion { get; set; }
 
+    [RequiresDynamicCode("Use 'GetList' instead")]
     public void InitData()
     {
         var list = EnumExtension.GetList<NetTypeEnum>();

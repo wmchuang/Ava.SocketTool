@@ -2,6 +2,7 @@
 using Avalonia.ReactiveUI;
 using System;
 using Ava.SocketTool.Extensions;
+using NLog;
 using ReactiveUI;
 
 namespace Ava.SocketTool;
@@ -14,8 +15,19 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception e)
+        {
+            var logger = Bootstrapper.GetService<ILogger>();
+            if (logger != null)
+            {
+                logger.Error(e);
+            }
+        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
