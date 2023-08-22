@@ -10,11 +10,11 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
-        <Version>1.0.0</Version>
-        <FileVersion>1.0.0</FileVersion>
+        <Version>2.0.0</Version>
+        <FileVersion>2.0.0</FileVersion>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
          <!--添加aot-->
-         <PublishAot>true</PublishAot> 
+<!--         <PublishAot>true</PublishAot> -->
     </PropertyGroup>
 
     <ItemGroup>
